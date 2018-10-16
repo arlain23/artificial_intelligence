@@ -1,6 +1,7 @@
 package ai.solver;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,18 +17,24 @@ public class BFS {
 	}
 	
 	public Board solve() throws NotSolvableException {
+		Set<Board> history = new HashSet<Board>();
+		
 		List<Board> row = new ArrayList<>();
 		row.add(initBoard);
 		
 		int iterator = 0;
 		while (true) {
-			System.out.println("I " + iterator);
 			Board correctBoard = checkCorrectness(row);
 			if (correctBoard == null) {
 				ArrayList<Board> newRow = new ArrayList<>();
 				for (Board board : row) {
 					List<Board> children = getChildren(board);
-					newRow.addAll(children);
+					for (Board child : children) {
+						if (!history.contains(child)) {
+							newRow.add(child);
+						}
+					}
+					history.addAll(children);
 				}
 				
 				row = newRow;

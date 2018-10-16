@@ -6,4 +6,6 @@ public interface Node {
 	public int getY();
 	public void setY(int y);
 	public int getValue();
+	
+	
 }
