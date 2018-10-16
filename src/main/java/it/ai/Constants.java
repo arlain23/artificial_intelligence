@@ -1,7 +1,18 @@
 package it.ai;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Constants {
 	public static enum DIRECTION {
 		LEFT, RIGHT, UP, DOWN
+	}
+	public static Map<DIRECTION, DIRECTION> REVERSE_DIRECTION = new HashMap<DIRECTION, DIRECTION> ();
+	
+	static {
+		REVERSE_DIRECTION.put(DIRECTION.LEFT, DIRECTION.RIGHT);
+		REVERSE_DIRECTION.put(DIRECTION.RIGHT, DIRECTION.LEFT);
+		REVERSE_DIRECTION.put(DIRECTION.UP, DIRECTION.DOWN);
+		REVERSE_DIRECTION.put(DIRECTION.DOWN, DIRECTION.UP);
 	}
 }

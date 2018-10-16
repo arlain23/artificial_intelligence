@@ -10,18 +10,21 @@ import javax.management.RuntimeErrorException;
 import ai.graph.EmptyNode;
 import ai.graph.Node;
 import ai.graph.NumberNode;
-import it.ai.Constants;
 import it.ai.Constants.DIRECTION;
 
-public class Board {
+public class Board implements Cloneable{
 	private Node [][] board;
 	private EmptyNode emptyNode;
+	private List<DIRECTION> sequenceOfSteps = new ArrayList<>();
 	
-	public Board (int r, int c) {
+	public Board (Node[][] board, EmptyNode emptyNode, List<DIRECTION> sequenceOfSteps) {
+		this.board = board;
+		this.emptyNode = emptyNode;
+		this.sequenceOfSteps = sequenceOfSteps;
+	}
+	
+	public Board(int r, int c, List<Integer> numbers) {
 		this.board = new Node[r][c];
-		
-		List<Integer> numbers = Arrays.asList(initArray(r*c));
-		Collections.shuffle(numbers);
 		
 		int x = 0; 
 		int y = 0;
@@ -30,72 +33,20 @@ public class Board {
 			int number = numbers.get(i);
 			if (number == 0) {
 				EmptyNode emptyNode = new EmptyNode(x,y);
-				this.board[x][y] = emptyNode;
+				this.board[y][x] = emptyNode;
 				this.emptyNode = emptyNode;
 			} else {
-				this.board[x][y] = new NumberNode(number, x, y);
+				this.board[y][x] = new NumberNode(number, x, y);
 			}
 			x++;
-			if (x > r) {
+			if (x >= c) {
 				x = 0;
-				c++;
+				y++;
 			}
 		}
 		
 	}
-	public Board(int r, int c, List<List<Integer>> numbers) {
-		this.board = new Node[r][c];
-		for (int i = 0; i < numbers.size(); i++) {
-			for (int j = 0; j < numbers.get(0).size(); j++) {
-				int number = numbers.get(i).get(j);
-				if (number == 0) {
-					EmptyNode emptyNode = new EmptyNode(i,j);
-					this.board[i][j] = emptyNode;
-					this.emptyNode = emptyNode;
-				} else {
-					this.board[i][j] = new NumberNode(number, i, j);
-				}
-			}
-		}
-	}
 	
-	
-	public void moveNode(DIRECTION direction) {
-		int x = this.emptyNode.getX();
-		int y = this.emptyNode.getY();
-		if (direction.equals(DIRECTION.LEFT)) {
-			int newX = x - 1;
-			int newY = y;
-			switchNodes(x, y, newX, newY);
-			
-		} else if (direction.equals(DIRECTION.RIGHT)) {
-			int newX = x + 1;
-			int newY = y;
-			switchNodes(x, y, newX, newY);
-			
-		} else if (direction.equals(DIRECTION.UP)) {
-			int newX = x;
-			int newY = y - 1;
-			switchNodes(x, y, newX, newY);
-			
-		} else if (direction.equals(DIRECTION.DOWN)) {
-			int newX = x;
-			int newY = y + 1;
-			switchNodes(x, y, newX, newY);
-			
-		} else {
-			throw new RuntimeErrorException(null);
-		}
-			
-	}
-	private void switchNodes(int x, int y, int newX, int newY) {
-		Node nodeToSwitch = this.board[newX][newY];
-		this.board[newX][newY] = emptyNode;
-		this.board[x][y] = nodeToSwitch;
-		
-		this.emptyNode.setX(newX);
-		this.emptyNode.setY(newY);
-	}
 	private Integer[] initArray(int size) {
 		Integer[] a = new Integer[size];
 	    for (int i = 0; i < 100; ++i) {
@@ -107,7 +58,7 @@ public class Board {
 		List<Integer> boardConfiguration = new ArrayList<Integer>();
 		for (int y = 0; y < this.board.length; y++) {
 			for (int x = 0; x < this.board[0].length; x++) {
-				boardConfiguration.add(this.board[x][y].getValue());
+				boardConfiguration.add(this.board[y][x].getValue());
 			}
 		}
 		return boardConfiguration;
@@ -123,4 +74,55 @@ public class Board {
 		return this.board.length;
 	}
 	
+    public void setSequenceOfSteps(List<DIRECTION> sequenceOfSteps) {
+		this.sequenceOfSteps = sequenceOfSteps;
+	}
+	public List<DIRECTION> getSequenceOfSteps() {
+		return sequenceOfSteps;
+	}
+	public Node[][] getBoard() {
+		return board;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (int y = 0; y < this.board.length; y++) {
+			for (int x = 0; x < this.board[0].length; x++) {
+				int number = this.board[y][x].getValue();
+				sb.append(number);
+				sb.append(" ");
+			}
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
+
+	@Override
+    protected Object clone() throws CloneNotSupportedException {
+    	int r = board.length;
+    	int c = board[0].length;
+    	List<Integer> numbers = getBoardConfiguration();
+    	
+    	Node[][] newBoard = new Node[r][c];
+    	EmptyNode emptyNode = null;
+    	int index = 0;
+    	for (int y = 0; y < r; y++) {
+			for (int x = 0; x < c; x++) {
+				int number = numbers.get(index++);
+				if (number == 0) {
+					emptyNode = new EmptyNode(x,y);
+					newBoard[y][x] = emptyNode;
+				} else {
+					newBoard[y][x] = new NumberNode(number, x, y);
+				}
+			}
+    	}
+    	return new Board(newBoard, emptyNode, new ArrayList<>(sequenceOfSteps));
+    }
+
+	public void addDirection(DIRECTION direction) {
+		this.sequenceOfSteps.add(direction);
+		
+	}
 }
