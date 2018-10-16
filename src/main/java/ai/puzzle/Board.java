@@ -63,6 +63,12 @@ public class Board implements Cloneable{
 		}
 		return boardConfiguration;
 	}
+
+	public void addDirection(DIRECTION direction) {
+		this.sequenceOfSteps.add(direction);
+		
+	}
+	
 	public EmptyNode getEmptyNode() {
 		return emptyNode;
 	}
@@ -98,6 +104,29 @@ public class Board implements Cloneable{
 		return sb.toString();
 	}
 
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.deepHashCode(board);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Board other = (Board) obj;
+		if (!Arrays.deepEquals(board, other.board))
+			return false;
+		return true;
+	}
+
 	@Override
     protected Object clone() throws CloneNotSupportedException {
     	int r = board.length;
@@ -120,9 +149,4 @@ public class Board implements Cloneable{
     	}
     	return new Board(newBoard, emptyNode, new ArrayList<>(sequenceOfSteps));
     }
-
-	public void addDirection(DIRECTION direction) {
-		this.sequenceOfSteps.add(direction);
-		
-	}
 }

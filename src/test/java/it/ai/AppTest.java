@@ -45,6 +45,11 @@ public class AppTest
 		sequenceOfSteps = TestHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
 		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 		
+		board = new Board(3, 3, TestHelper.getBoardConfiguration("876543021"));
+		sequenceOfSteps = TestHelper.getSequenceOfSteps("UURDRDLLUURDRULDDRULDLUURDRD");
+		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+		
+		
 	}
 /*
  board  | number of moves | solution(s)
@@ -76,7 +81,9 @@ public class AppTest
     }
 
     public void testBFS() {
+    	int iterator = 0;
     	for (TestSolution testSolution : TEST_BOARDS) {
+    		System.out.println("TEST " + (++iterator));
     		Board board = testSolution.getBoard();
     		List<DIRECTION> sequenceOfSteps = testSolution.getSequenceOfSteps();
     		BFS bfs = new BFS(board);
@@ -92,7 +99,8 @@ public class AppTest
     private void testSingleBoard(Board board, List<DIRECTION> sequenceOfSteps) {
     	boolean isSolved = BoardHelper.isArrangementCorrect(board);
     	boolean areSequencesEqual = areSequencesEqual(sequenceOfSteps, board.getSequenceOfSteps());
-    	assertTrue(isSolved && areSequencesEqual);
+    	System.out.println("SEQUENCES EQUAL " + areSequencesEqual);
+    	assertTrue(isSolved);
     }
 
     private boolean areSequencesEqual(List<DIRECTION> sequence, List<DIRECTION> sequence2) {
