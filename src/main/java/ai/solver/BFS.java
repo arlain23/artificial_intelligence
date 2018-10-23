@@ -1,68 +1,55 @@
 package ai.solver;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 
 import ai.puzzle.Board;
 import ai.puzzle.BoardHelper;
-import it.ai.Constants.DIRECTION;
+import it.ai.Constants.Direction;
 
-public class BFS {
+public class BFS implements PuzzleSolver{
 	private Board initBoard;
+	private List<Direction> directionOrder;
 	
-	public BFS(Board initBoard) {
+	public BFS(Board initBoard, List<Direction> directionOrder) {
 		this.initBoard = initBoard;
+		this.directionOrder = directionOrder;
 	}
+
+	
+	/*
+	 *  przeszukiwanie kolejki zajmuje taaaaaaaaaaaaak długo, ze myśleliśmy że nie działa
+	 */
 	
 	public Board solve() throws NotSolvableException {
-		Set<Board> history = new HashSet<Board>();
+		Set<Board> history = new HashSet<>();
+		Queue<Board> queue = new ArrayDeque<>();
 		
-		List<Board> row = new ArrayList<>();
-		row.add(initBoard);
+		queue.add(this.initBoard);
 		
 		int iterator = 0;
-		while (true) {
-			Board correctBoard = checkCorrectness(row);
-			if (correctBoard == null) {
-				ArrayList<Board> newRow = new ArrayList<>();
-				for (Board board : row) {
-					List<Board> children = getChildren(board);
-					for (Board child : children) {
-						if (!history.contains(child)) {
-							newRow.add(child);
-						}
-					}
-					history.addAll(children);
-				}
-				
-				row = newRow;
+		while (!queue.isEmpty()) {
+			Board currentBoard = queue.poll();
+			
+			boolean isCorrect = BoardHelper.checkCorrectness(currentBoard);
+			if (isCorrect) {
+				return currentBoard;
 			} else {
-				return correctBoard;
+				List<Board> children = BoardHelper.getChildren(currentBoard, directionOrder);
+				for (Board child : children) {
+					if (!history.contains(child)) {
+						queue.add(child);
+						history.add(child);
+					}
+				}
 			}
-			if ((iterator++) > 200) throw new NotSolvableException("Exceeded number of iterations \n" + this.initBoard);
+//			if ((iterator++) > 200) throw new NotSolvableException("Exceeded number of iterations \n" + this.initBoard);
 		}
+		throw new NotSolvableException("Puzzle is not solvable");
 	}
-	
-	private Board checkCorrectness(List<Board> row) {
-		for (Board board : row) {
-			boolean isCorrect = BoardHelper.isArrangementCorrect(board);
-			if (isCorrect) return board;
-		}
-		return null;
-	}
-
-	private List<Board> getChildren (Board board) {
-		List<Board> children = new ArrayList<>();
-		Set<DIRECTION> availableMoves = BoardHelper.getAvailableMoves(board);
-		for (DIRECTION direction : availableMoves) {
-			Board child = BoardHelper.moveNode(direction, board);
-			children.add(child);
-		}
-		
-		return children;
-	}
-	
-	
 }

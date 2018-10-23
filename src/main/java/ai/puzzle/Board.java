@@ -10,14 +10,16 @@ import javax.management.RuntimeErrorException;
 import ai.graph.EmptyNode;
 import ai.graph.Node;
 import ai.graph.NumberNode;
-import it.ai.Constants.DIRECTION;
+import it.ai.Constants.Direction;
 
 public class Board implements Cloneable{
 	private Node [][] board;
 	private EmptyNode emptyNode;
-	private List<DIRECTION> sequenceOfSteps = new ArrayList<>();
+	private List<Direction> sequenceOfSteps = new ArrayList<>();
 	
-	public Board (Node[][] board, EmptyNode emptyNode, List<DIRECTION> sequenceOfSteps) {
+	private List<Board> children = new ArrayList<>();
+	
+	public Board (Node[][] board, EmptyNode emptyNode, List<Direction> sequenceOfSteps) {
 		this.board = board;
 		this.emptyNode = emptyNode;
 		this.sequenceOfSteps = sequenceOfSteps;
@@ -64,11 +66,23 @@ public class Board implements Cloneable{
 		return boardConfiguration;
 	}
 
-	public void addDirection(DIRECTION direction) {
+	public void addDirection(Direction direction) {
 		this.sequenceOfSteps.add(direction);
 		
 	}
 	
+	public List<Board> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<Board> children) {
+		this.children = children;
+	}
+	
+	public void addChild(Board child) {
+		this.children.add(child);
+	}
+
 	public EmptyNode getEmptyNode() {
 		return emptyNode;
 	}
@@ -80,11 +94,15 @@ public class Board implements Cloneable{
 		return this.board.length;
 	}
 	
-    public void setSequenceOfSteps(List<DIRECTION> sequenceOfSteps) {
+    public void setSequenceOfSteps(List<Direction> sequenceOfSteps) {
 		this.sequenceOfSteps = sequenceOfSteps;
 	}
-	public List<DIRECTION> getSequenceOfSteps() {
+	public List<Direction> getSequenceOfSteps() {
 		return sequenceOfSteps;
+	}
+	public Direction getLastStep() {
+		if (sequenceOfSteps.size() == 0) return null;
+		return sequenceOfSteps.get(sequenceOfSteps.size() - 1);
 	}
 	public Node[][] getBoard() {
 		return board;

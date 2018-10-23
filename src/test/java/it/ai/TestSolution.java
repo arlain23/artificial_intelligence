@@ -3,12 +3,12 @@ package it.ai;
 import java.util.List;
 
 import ai.puzzle.Board;
-import it.ai.Constants.DIRECTION;
+import it.ai.Constants.Direction;
 
 public class TestSolution {
 	private Board board;
-	private List<DIRECTION> sequenceOfSteps;
-	public TestSolution(Board board, List<DIRECTION> sequenceOfSteps) {
+	private List<Direction> sequenceOfSteps;
+	public TestSolution(Board board, List<Direction> sequenceOfSteps) {
 		super();
 		this.board = board;
 		this.sequenceOfSteps = sequenceOfSteps;
@@ -19,10 +19,10 @@ public class TestSolution {
 	public void setBoard(Board board) {
 		this.board = board;
 	}
-	public List<DIRECTION> getSequenceOfSteps() {
+	public List<Direction> getSequenceOfSteps() {
 		return sequenceOfSteps;
 	}
-	public void setSequenceOfSteps(List<DIRECTION> sequenceOfSteps) {
+	public void setSequenceOfSteps(List<Direction> sequenceOfSteps) {
 		this.sequenceOfSteps = sequenceOfSteps;
 	}
 	

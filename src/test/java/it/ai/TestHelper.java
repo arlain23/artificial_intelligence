@@ -3,7 +3,7 @@ package it.ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import it.ai.Constants.DIRECTION;
+import it.ai.Constants.Direction;
 
 public class TestHelper {
 	public static List<Integer> getBoardConfiguration(String numbers) {
@@ -15,18 +15,18 @@ public class TestHelper {
 		return config;
 	}
 	
-	public static List<DIRECTION> getSequenceOfSteps(String sequence) {
-		List<DIRECTION> steps = new ArrayList<>();
+	public static List<Direction> getSequenceOfSteps(String sequence) {
+		List<Direction> steps = new ArrayList<>();
 		for (int i = 0; i < sequence.length(); i++) {
 			String step = (sequence.charAt(i) + "").toLowerCase();
 			if (step.equals("r")) {
-				steps.add(DIRECTION.RIGHT);
+				steps.add(Direction.RIGHT);
 			} else if (step.equals("l")) {
-				steps.add(DIRECTION.LEFT);
+				steps.add(Direction.LEFT);
 			} else if (step.equals("u")){
-				steps.add(DIRECTION.UP);
+				steps.add(Direction.UP);
 			} else if (step.equals("d")) {
-				steps.add(DIRECTION.DOWN);
+				steps.add(Direction.DOWN);
 			}
 		}
 		return steps;
