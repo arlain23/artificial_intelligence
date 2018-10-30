@@ -9,6 +9,7 @@ import java.util.Stack;
 
 import ai.puzzle.Board;
 import ai.puzzle.BoardHelper;
+import it.ai.Constants;
 import it.ai.Constants.Direction;
 
 public class IDDFS implements PuzzleSolver {
@@ -22,45 +23,33 @@ public class IDDFS implements PuzzleSolver {
 	
 	@Override
 	public Board solve() throws NotSolvableException {
-		Queue<Board> queue = new ArrayDeque<>();
-		
-		queue.add(this.initBoard);
-		
-		int iterator = 0;
-		
 		int depth = 0;
-		while (!queue.isEmpty()) {
-			iterator++;
+		while (depth < Constants.MAX_DEPTH) {
 			depth++;
-			if (depth > 200) throw new NotSolvableException("Exceeded number of iterations");
-			Board currentBoardBFS = queue.poll();
-			
-			// run DFS for current board
+		
+			Set<Board> history = new HashSet<Board>();
 			Stack<Board> stack = new Stack<>();
-			stack.push(currentBoardBFS);
-			
+			stack.push(this.initBoard);
+		
 			while (!stack.isEmpty()) {
-				Board currentBoardDFS = stack.pop();
-				boolean isCorrect = BoardHelper.checkCorrectness(currentBoardDFS);
+				Board currentBoard = stack.pop();
+				history.add(currentBoard);
+				boolean isCorrect = BoardHelper.checkCorrectness(currentBoard);
 				if (isCorrect) {
-					return currentBoardDFS;
+					return currentBoard;
 				} else {
 					// check of depth
-					if (currentBoardDFS.getSequenceOfSteps().size() < depth) {
-						List<Board> children = BoardHelper.getChildren(currentBoardDFS, directionOrder);
+					if (currentBoard.getSequenceOfSteps().size() < depth) {
+						List<Board> children = BoardHelper.getChildren(currentBoard, directionOrder);
 						for (Board child : children) {
-							stack.add(child);
+							if (!history.contains(child) && !stack.contains(child)) {
+								stack.add(child);
+							}
 						}
 					}
 				}
 			}
-			
-			List<Board> children = BoardHelper.getChildren(currentBoardBFS, directionOrder);
-			for (Board child : children) {
-				queue.add(child);
-			}
 		}
-		throw new NotSolvableException("Puzzle is not solvable");
+		throw new NotSolvableException("Not solvable");
 	}
-
 }

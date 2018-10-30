@@ -122,12 +122,12 @@ public class AppTest
     public void testIDDFS() {
     	int iterator = 0;
     	for (TestSolution testSolution : TEST_BOARDS) {
-    		System.out.println("TEST IDDFS" + (++iterator));
+    		System.out.println("TEST IDDFS " + (++iterator));
     		Board board = testSolution.getBoard();
     		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
-    		IDDFS dfs = new IDDFS(board, Constants.DIRECTION_ORDER);
+    		IDDFS iddfs = new IDDFS(board, Constants.DIRECTION_ORDER);
     		try {
-				Board solvedBoard = dfs.solve();
+				Board solvedBoard = iddfs.solve();
 				testSingleBoard(solvedBoard, sequenceOfSteps);
 			} catch (NotSolvableException e) {
 				fail();

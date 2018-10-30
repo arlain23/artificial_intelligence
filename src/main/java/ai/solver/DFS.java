@@ -10,6 +10,7 @@ import javax.management.RuntimeErrorException;
 
 import ai.puzzle.Board;
 import ai.puzzle.BoardHelper;
+import it.ai.Constants;
 import it.ai.Constants.Direction;
 
 public class DFS {
@@ -36,7 +37,7 @@ public class DFS {
 				return currentBoard;
 			} else {
 				// check of depth
-				if (currentBoard.getSequenceOfSteps().size() < 2000) {
+				if (currentBoard.getSequenceOfSteps().size() < Constants.MAX_DEPTH) {
 					List<Board> children = BoardHelper.getChildren(currentBoard, directionOrder);
 					for (Board child : children) {
 						if (!history.contains(child) && !stack.contains(child)) {

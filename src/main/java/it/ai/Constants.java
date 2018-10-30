@@ -19,4 +19,7 @@ public class Constants {
 	}
 	
 	public static List<Direction> DIRECTION_ORDER = Arrays.asList(new Direction[] {Direction.RIGHT, Direction.DOWN, Direction.LEFT, Direction.UP});
+	
+	public static int MAX_DEPTH = 2000;
+
 }
