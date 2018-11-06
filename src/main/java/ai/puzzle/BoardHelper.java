@@ -29,8 +29,6 @@ public class BoardHelper {
 		
 		return false;
 		
-		
-		
 	}
 	
 	public static List<Direction> getAvailableMoves (Board board, List<Direction> directionOrder) {

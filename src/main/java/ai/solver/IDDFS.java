@@ -9,6 +9,7 @@ import java.util.Stack;
 
 import ai.puzzle.Board;
 import ai.puzzle.BoardHelper;
+import heuristics.Heuristics;
 import it.ai.Constants;
 import it.ai.Constants.Direction;
 
@@ -22,7 +23,7 @@ public class IDDFS implements PuzzleSolver {
 	}
 	
 	@Override
-	public Board solve() throws NotSolvableException {
+	public Board solve(Heuristics heuristics) throws NotSolvableException {
 		int depth = 0;
 		while (depth < Constants.MAX_DEPTH) {
 			depth++;

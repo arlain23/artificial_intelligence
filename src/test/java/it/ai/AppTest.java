@@ -8,9 +8,12 @@ import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 import ai.puzzle.Board;
 import ai.puzzle.BoardHelper;
 import ai.solver.BFS;
+import ai.solver.BestFS;
 import ai.solver.DFS;
 import ai.solver.IDDFS;
 import ai.solver.NotSolvableException;
+import heuristics.IncorrectPositionHeuristics;
+import heuristics.ManahatanDistanceHeuristics;
 import it.ai.Constants.Direction;
 import junit.framework.TestCase;
 
@@ -92,7 +95,7 @@ public class AppTest
 //    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
 //    		BFS bfs = new BFS(board, Constants.DIRECTION_ORDER);
 //    		try {
-//				Board solvedBoard = bfs.solve();
+//				Board solvedBoard = bfs.solve(null);
 //				testSingleBoard(solvedBoard, sequenceOfSteps);
 //			} catch (NotSolvableException e) {
 //				e.printStackTrace();
@@ -110,7 +113,7 @@ public class AppTest
 //    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
 //    		DFS dfs = new DFS(board, Constants.DIRECTION_ORDER);
 //    		try {
-//				Board solvedBoard = dfs.solve();
+//				Board solvedBoard = dfs.solve(null);
 //				testSingleBoard(solvedBoard, sequenceOfSteps);
 //			} catch (NotSolvableException e) {
 //				fail();
@@ -119,15 +122,32 @@ public class AppTest
 //    	}
 //    }
     
-    public void testIDDFS() {
+//    public void testIDDFS() {
+//    	int iterator = 0;
+//    	for (TestSolution testSolution : TEST_BOARDS) {
+//    		System.out.println("TEST IDDFS " + (++iterator));
+//    		Board board = testSolution.getBoard();
+//    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+//    		IDDFS iddfs = new IDDFS(board, Constants.DIRECTION_ORDER);
+//    		try {
+//				Board solvedBoard = iddfs.solve(null);
+//				testSingleBoard(solvedBoard, sequenceOfSteps);
+//			} catch (NotSolvableException e) {
+//				fail();
+//			}
+//    		
+//    	}
+//    }
+    
+    public void testBestFS() {
     	int iterator = 0;
     	for (TestSolution testSolution : TEST_BOARDS) {
-    		System.out.println("TEST IDDFS " + (++iterator));
+    		System.out.println("TEST BestFS " + (++iterator));
     		Board board = testSolution.getBoard();
     		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
-    		IDDFS iddfs = new IDDFS(board, Constants.DIRECTION_ORDER);
+    		BestFS bfs = new BestFS(board, Constants.DIRECTION_ORDER);
     		try {
-				Board solvedBoard = iddfs.solve();
+				Board solvedBoard = bfs.solve(ManahatanDistanceHeuristics.getInstance());
 				testSingleBoard(solvedBoard, sequenceOfSteps);
 			} catch (NotSolvableException e) {
 				fail();

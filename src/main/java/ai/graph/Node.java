@@ -7,5 +7,4 @@ public interface Node {
 	public void setY(int y);
 	public int getValue();
 	
-	
 }

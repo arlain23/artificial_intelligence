@@ -66,6 +66,17 @@ public class Board implements Cloneable{
 		return boardConfiguration;
 	}
 
+	public Node findTileByValue(int value) {
+		for (int y = 0; y < board.length; y++) {
+			for (int x = 0; x < board[0].length; x++) {
+				if (value == board[y][x].getValue()) {
+					return board[y][x];
+				}
+			}
+		}
+		return null;
+	}
+	
 	public void addDirection(Direction direction) {
 		this.sequenceOfSteps.add(direction);
 		

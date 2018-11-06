@@ -10,10 +10,11 @@ import javax.management.RuntimeErrorException;
 
 import ai.puzzle.Board;
 import ai.puzzle.BoardHelper;
+import heuristics.Heuristics;
 import it.ai.Constants;
 import it.ai.Constants.Direction;
 
-public class DFS {
+public class DFS implements PuzzleSolver{
 	private Board initBoard;
 	private List<Direction> directionOrder;
 	private int iterator = 0;
@@ -23,7 +24,8 @@ public class DFS {
 		this.directionOrder = directionOrder;
 	}
 	
-	public Board solve() throws NotSolvableException {
+	@Override
+	public Board solve(Heuristics heuristics) throws NotSolvableException {
 		Set<Board> history = new HashSet<Board>();
 		Stack<Board> stack = new Stack<>();
 		stack.push(this.initBoard);

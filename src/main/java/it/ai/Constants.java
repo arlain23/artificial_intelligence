@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ai.puzzle.Board;
+
 public class Constants {
 	public static enum Direction {
 		LEFT, RIGHT, UP, DOWN
@@ -22,4 +24,12 @@ public class Constants {
 	
 	public static int MAX_DEPTH = 2000;
 
+	public static Board correctBoardBeginningZero;
+	public static Board correctBoardEndingZero;
+	
+	static {
+		correctBoardBeginningZero = new Board(3, 3, Arrays.asList(new Integer[] {0,1,2,3,4,5,6,7,8}));
+		correctBoardEndingZero = new Board(3, 3, Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8,0}));
+	}
+	
 }

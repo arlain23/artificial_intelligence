@@ -24,7 +24,7 @@ public class EmptyNode implements Node{
 	public int getValue() {
 		return 0;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -49,6 +49,8 @@ public class EmptyNode implements Node{
 			return false;
 		return true;
 	}
+
+
 	
 	
 	

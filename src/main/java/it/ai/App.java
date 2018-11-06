@@ -35,7 +35,7 @@ public class App
         
         DFS dfs = new DFS(rootBoard, Constants.DIRECTION_ORDER);
         try {
-			Board board = dfs.solve();
+			Board board = dfs.solve(null);
 			System.out.println();
 			System.out.println(board);
 			System.out.println(board.getSequenceOfSteps());
