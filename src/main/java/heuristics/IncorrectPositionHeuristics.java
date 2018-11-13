@@ -20,12 +20,12 @@ public class IncorrectPositionHeuristics implements Heuristics{
 		}
 		return heuristics;
 	}
-	
-	private int getHeuristicsValue(Board board) {
+	@Override
+	public int getHeuristicsValueBFS(Board board) {
 		int numberOfIncorrectTilesBeginningEmpty = 0;
 		List<Integer> configuration = board.getBoardConfiguration();
 		
-		List<Integer> correctConfiguration = Constants.correctBoardBeginningZero.getBoardConfiguration();
+		List<Integer> correctConfiguration = board.getCorrectBoardBeginningZero().getBoardConfiguration();
 		for (int i = 0 ; i < configuration.size(); i++) {
 			if (configuration.get(i) != correctConfiguration.get(i)) {
 				numberOfIncorrectTilesBeginningEmpty++;
@@ -34,7 +34,7 @@ public class IncorrectPositionHeuristics implements Heuristics{
 		
 
 		int numberOfIncorrectTilesEndingEmpty = 0;
-		correctConfiguration = Constants.correctBoardEndingZero.getBoardConfiguration();
+		correctConfiguration = board.getCorrectBoardEndingZero().getBoardConfiguration();
 		for (int i = 0 ; i < configuration.size(); i++) {
 			if (configuration.get(i) != correctConfiguration.get(i)) {
 				numberOfIncorrectTilesEndingEmpty++;
@@ -43,13 +43,43 @@ public class IncorrectPositionHeuristics implements Heuristics{
 		
 		return numberOfIncorrectTilesBeginningEmpty < numberOfIncorrectTilesEndingEmpty ? numberOfIncorrectTilesBeginningEmpty : numberOfIncorrectTilesEndingEmpty;
 	}
+	@Override
+	public int getHeuristicsValueAStar(Board board) {
+		return getHeuristicsValueBFS(board) + board.getSequenceOfSteps().size();
+	}
 	
 	@Override	
-	public Comparator<Board> getComparator() {
+	public Comparator<Board> getBFSComparator() {
 	    Comparator<Board> comparator = new Comparator<Board>() {
 	        @Override
 	        public int compare(Board board1, Board board2) {
-	            return getHeuristicsValue(board1) - getHeuristicsValue(board2);
+	            return getHeuristicsValueBFS(board1) - getHeuristicsValueBFS(board2);
+	        }
+	    };
+	    
+	    return comparator;
+	}
+	
+	@Override
+	public Comparator<Board> getAStarComparator() {
+		 Comparator<Board> comparator = new Comparator<Board>() {
+		        @Override
+		        public int compare(Board board1, Board board2) {
+		        	int heuristicsValueBoard1 = getHeuristicsValueAStar(board1);
+		        	int heuristicsValueBoard2 = getHeuristicsValueAStar(board2);
+		        	
+					return heuristicsValueBoard1 - heuristicsValueBoard2;
+		        }
+		    };
+		    
+	    return comparator;
+	}
+	@Override
+	public Comparator<Board> getSMAStarComparator() {
+		Comparator<Board> comparator = new Comparator<Board>() {
+	        @Override
+	        public int compare(Board board1, Board board2) {
+				return board1.getF_x() - board2.getF_x();
 	        }
 	    };
 	    

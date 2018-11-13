@@ -2,17 +2,16 @@ package it.ai;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import it.ai.Constants.Direction;
 
 public class TestHelper {
 	public static List<Integer> getBoardConfiguration(String numbers) {
-		List<Integer> config = new ArrayList<>();
-		for (int i = 0; i < numbers.length(); i++) {
-			int number = Integer.valueOf(numbers.charAt(i) + "");
-			config.add(number);
-		}
-		return config;
+		return Stream.of(numbers.split(" "))
+			      .map(Integer::parseInt)
+			      .collect(Collectors.toList());
 	}
 	
 	public static List<Direction> getSequenceOfSteps(String sequence) {

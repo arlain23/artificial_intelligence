@@ -24,7 +24,7 @@ public class BestFS implements PuzzleSolver {
 	@Override
 	public Board solve(Heuristics heuristics) throws NotSolvableException {
 		Set<Board> history = new HashSet<>();
-		Comparator<Board> comparator = heuristics.getComparator();
+		Comparator<Board> comparator = heuristics.getBFSComparator();
 		Queue<Board> queue = new PriorityQueue<Board>(comparator); 
 		 
 		

@@ -1,10 +1,9 @@
 package ai.solver;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
@@ -13,19 +12,21 @@ import ai.puzzle.BoardHelper;
 import heuristics.Heuristics;
 import it.ai.Constants.Direction;
 
-public class BFS implements PuzzleSolver{
+public class AStar implements PuzzleSolver{
 	private Board initBoard;
 	private List<Direction> directionOrder;
 	
-	public BFS(Board initBoard, List<Direction> directionOrder) {
+	public AStar(Board initBoard, List<Direction> directionOrder) {
 		this.initBoard = initBoard;
 		this.directionOrder = directionOrder;
 	}
-
+	
 	@Override
 	public Board solve(Heuristics heuristics) throws NotSolvableException {
 		Set<Board> history = new HashSet<>();
-		Queue<Board> queue = new ArrayDeque<>();
+		Comparator<Board> comparator = heuristics.getAStarComparator();
+		Queue<Board> queue = new PriorityQueue<Board>(comparator); 
+		 
 		
 		queue.add(this.initBoard);
 		

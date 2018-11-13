@@ -86,6 +86,7 @@ public class BoardHelper {
 		try {
 			newBoard = (Board) board.clone();
 			newBoard.addDirection(direction);
+			newBoard.setParentBoard(board);
 			int x = newBoard.getEmptyNode().getX();
 			int y = newBoard.getEmptyNode().getY();
 			if (direction.equals(Direction.LEFT)) {

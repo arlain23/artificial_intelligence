@@ -7,14 +7,17 @@ import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
 
 import ai.puzzle.Board;
 import ai.puzzle.BoardHelper;
+import ai.solver.AStar;
 import ai.solver.BFS;
 import ai.solver.BestFS;
 import ai.solver.DFS;
 import ai.solver.IDDFS;
 import ai.solver.NotSolvableException;
+import ai.solver.SMAStar;
 import heuristics.IncorrectPositionHeuristics;
 import heuristics.ManahatanDistanceHeuristics;
 import it.ai.Constants.Direction;
+import it.ai.Constants.PuzzleType;
 import junit.framework.TestCase;
 
 /**
@@ -28,33 +31,38 @@ public class AppTest
 		Board board;
 		List<Direction> sequenceOfSteps;
 		
-		board = new Board(3, 3, TestHelper.getBoardConfiguration("123405786"));
-		sequenceOfSteps = TestHelper.getSequenceOfSteps("RD");
+//		board = new Board(PuzzleType.eight, TestHelper.getBoardConfiguration("1 2 3 4 0 5 7 8 6"));
+//		sequenceOfSteps = TestHelper.getSequenceOfSteps("RD");
+//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//		
+//		board = new Board(3, 3, TestHelper.getBoardConfiguration("4 1 3 7 2 6 5 8 0"));
+//		sequenceOfSteps = TestHelper.getSequenceOfSteps("LLUURDDR");
+//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//		
+//		board = new Board(3, 3, TestHelper.getBoardConfiguration("1 2 3 4 8 0 7 6 5"));
+//		sequenceOfSteps = TestHelper.getSequenceOfSteps("DLURD");
+//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//		
+//		board = new Board(3, 3, TestHelper.getBoardConfiguration("1 2 6 3 5 0 4 7 8"));
+//		sequenceOfSteps = TestHelper.getSequenceOfSteps("ULDLDRRULURDD");
+//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//		
+//		board = new Board(3, 3, TestHelper.getBoardConfiguration("4 3 6 8 7 1 0 5 2"));
+//		sequenceOfSteps = TestHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
+//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//		
+//		board = new Board(3, 3, TestHelper.getBoardConfiguration("4 3 6 8 7 1 0 5 2"));
+//		sequenceOfSteps = TestHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
+//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//		
+//		board = new Board(3, 3, TestHelper.getBoardConfiguration("8 7 6 5 4 3 0 2 1"));
+//		sequenceOfSteps = TestHelper.getSequenceOfSteps("UURDRDLLUURDRULDDRULDLUURDRD");
+//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+		
+		board = new Board(PuzzleType.fifteen, TestHelper.getBoardConfiguration("5 1 7 3 9 2 11 4 13 6 15 8 0 10 14 12"));
+		sequenceOfSteps = TestHelper.getSequenceOfSteps("R");
 		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 		
-		board = new Board(3, 3, TestHelper.getBoardConfiguration("413726580"));
-		sequenceOfSteps = TestHelper.getSequenceOfSteps("LLUURDDR");
-		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-		
-		board = new Board(3, 3, TestHelper.getBoardConfiguration("123480765"));
-		sequenceOfSteps = TestHelper.getSequenceOfSteps("DLURD");
-		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-		
-		board = new Board(3, 3, TestHelper.getBoardConfiguration("126350478"));
-		sequenceOfSteps = TestHelper.getSequenceOfSteps("ULDLDRRULURDD");
-		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-		
-		board = new Board(3, 3, TestHelper.getBoardConfiguration("436871052"));
-		sequenceOfSteps = TestHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
-		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-		
-		board = new Board(3, 3, TestHelper.getBoardConfiguration("436871052"));
-		sequenceOfSteps = TestHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
-		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-		
-		board = new Board(3, 3, TestHelper.getBoardConfiguration("876543021"));
-		sequenceOfSteps = TestHelper.getSequenceOfSteps("UURDRDLLUURDRULDDRULDLUURDRD");
-		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 		
 		
 	}
@@ -87,23 +95,23 @@ public class AppTest
         super( testName );
     }
 
-//    public void testBFS() {
-//    	int iterator = 0;
-//    	for (TestSolution testSolution : TEST_BOARDS) {
-//    		System.out.println("TEST BFS" + (++iterator));
-//    		Board board = testSolution.getBoard();
-//    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
-//    		BFS bfs = new BFS(board, Constants.DIRECTION_ORDER);
-//    		try {
-//				Board solvedBoard = bfs.solve(null);
-//				testSingleBoard(solvedBoard, sequenceOfSteps);
-//			} catch (NotSolvableException e) {
-//				e.printStackTrace();
-//				fail();
-//			}
-//    		
-//    	}
-//    }
+    public void testBFS() {
+    	int iterator = 0;
+    	for (TestSolution testSolution : TEST_BOARDS) {
+    		System.out.println("TEST BFS" + (++iterator));
+    		Board board = testSolution.getBoard();
+    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+    		BFS bfs = new BFS(board, Constants.DIRECTION_ORDER);
+    		try {
+				Board solvedBoard = bfs.solve(null);
+				testSingleBoard(solvedBoard, sequenceOfSteps);
+			} catch (NotSolvableException e) {
+				e.printStackTrace();
+				fail();
+			}
+    		
+    	}
+    }
     
 //    public void testDFS() {
 //    	int iterator = 0;
@@ -122,22 +130,22 @@ public class AppTest
 //    	}
 //    }
     
-//    public void testIDDFS() {
-//    	int iterator = 0;
-//    	for (TestSolution testSolution : TEST_BOARDS) {
-//    		System.out.println("TEST IDDFS " + (++iterator));
-//    		Board board = testSolution.getBoard();
-//    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
-//    		IDDFS iddfs = new IDDFS(board, Constants.DIRECTION_ORDER);
-//    		try {
-//				Board solvedBoard = iddfs.solve(null);
-//				testSingleBoard(solvedBoard, sequenceOfSteps);
-//			} catch (NotSolvableException e) {
-//				fail();
-//			}
-//    		
-//    	}
-//    }
+    public void testIDDFS() {
+    	int iterator = 0;
+    	for (TestSolution testSolution : TEST_BOARDS) {
+    		System.out.println("TEST IDDFS " + (++iterator));
+    		Board board = testSolution.getBoard();
+    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+    		IDDFS iddfs = new IDDFS(board, Constants.DIRECTION_ORDER);
+    		try {
+				Board solvedBoard = iddfs.solve(null);
+				testSingleBoard(solvedBoard, sequenceOfSteps);
+			} catch (NotSolvableException e) {
+				fail();
+			}
+    		
+    	}
+    }
     
     public void testBestFS() {
     	int iterator = 0;
@@ -147,9 +155,44 @@ public class AppTest
     		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
     		BestFS bfs = new BestFS(board, Constants.DIRECTION_ORDER);
     		try {
-				Board solvedBoard = bfs.solve(ManahatanDistanceHeuristics.getInstance());
+				Board solvedBoard = bfs.solve(IncorrectPositionHeuristics.getInstance());
 				testSingleBoard(solvedBoard, sequenceOfSteps);
 			} catch (NotSolvableException e) {
+				fail();
+			}
+    		
+    	}
+    }
+    
+    public void testAStar() {
+    	int iterator = 0;
+    	for (TestSolution testSolution : TEST_BOARDS) {
+    		System.out.println("TEST A* " + (++iterator));
+    		Board board = testSolution.getBoard();
+    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+    		AStar aStar = new AStar(board, Constants.DIRECTION_ORDER);
+    		try {
+				Board solvedBoard = aStar.solve(ManahatanDistanceHeuristics.getInstance());
+				testSingleBoard(solvedBoard, sequenceOfSteps);
+			} catch (NotSolvableException e) {
+				fail();
+			}
+    		
+    	}
+    }
+    
+    public void testSMAStar() {
+    	int iterator = 0;
+    	for (TestSolution testSolution : TEST_BOARDS) {
+    		System.out.println("TEST SMA* " + (++iterator));
+    		Board board = testSolution.getBoard();
+    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+    		SMAStar smaStar = new SMAStar(board, Constants.DIRECTION_ORDER);
+    		try {
+				Board solvedBoard = smaStar.solve(ManahatanDistanceHeuristics.getInstance());
+				testSingleBoard(solvedBoard, sequenceOfSteps);
+			} catch (NotSolvableException e) {
+				System.out.println(e.getLocalizedMessage());
 				fail();
 			}
     		

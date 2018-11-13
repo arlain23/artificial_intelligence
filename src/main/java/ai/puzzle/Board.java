@@ -10,22 +10,48 @@ import javax.management.RuntimeErrorException;
 import ai.graph.EmptyNode;
 import ai.graph.Node;
 import ai.graph.NumberNode;
+import it.ai.Constants;
 import it.ai.Constants.Direction;
+import it.ai.Constants.PuzzleType;
 
 public class Board implements Cloneable{
 	private Node [][] board;
 	private EmptyNode emptyNode;
+	
+	private Board correctBoardBeginningZero;
+	private Board correctBoardEndingZero;
+	
+	
 	private List<Direction> sequenceOfSteps = new ArrayList<>();
 	
-	private List<Board> children = new ArrayList<>();
+	private Board parentBoard;
 	
-	public Board (Node[][] board, EmptyNode emptyNode, List<Direction> sequenceOfSteps) {
+	private int f_x = 0;
+	private int forgotten_f_x = 0;
+	
+	public Board (Node[][] board, EmptyNode emptyNode, List<Direction> sequenceOfSteps, Board correctBoardBeginningZero, Board correctBoardEndingZero) {
 		this.board = board;
 		this.emptyNode = emptyNode;
 		this.sequenceOfSteps = sequenceOfSteps;
+		
+		this.correctBoardBeginningZero = correctBoardBeginningZero;
+		this.correctBoardEndingZero = correctBoardEndingZero;
 	}
 	
-	public Board(int r, int c, List<Integer> numbers) {
+	public Board(PuzzleType puzzleType, List<Integer> numbers) {
+		int r = 0;
+		int c = 0;
+		if (puzzleType == PuzzleType.eight) {
+			r = 3;
+			c = 3;
+			this.correctBoardBeginningZero = Constants.correctBoardBeginningZero8Puzzle;
+			this.correctBoardEndingZero = Constants.correctBoardEndingZero8Puzzle;
+		} else if (puzzleType == PuzzleType.fifteen) {
+			r = 4;
+			c = 4;
+			this.correctBoardBeginningZero = Constants.correctBoardBeginningZero15Puzzle;
+			this.correctBoardEndingZero = Constants.correctBoardEndingZero15Puzzle;
+		}
 		this.board = new Node[r][c];
 		
 		int x = 0; 
@@ -82,16 +108,21 @@ public class Board implements Cloneable{
 		
 	}
 	
-	public List<Board> getChildren() {
-		return children;
+	
+	public int getF_x() {
+		return f_x;
 	}
 
-	public void setChildren(List<Board> children) {
-		this.children = children;
+	public void setF_x(int f_x) {
+		this.f_x = f_x;
 	}
-	
-	public void addChild(Board child) {
-		this.children.add(child);
+
+	public int getForgotten_f_x() {
+		return forgotten_f_x;
+	}
+
+	public void setForgotten_f_x(int forgotten_f_x) {
+		this.forgotten_f_x = forgotten_f_x;
 	}
 
 	public EmptyNode getEmptyNode() {
@@ -119,6 +150,23 @@ public class Board implements Cloneable{
 		return board;
 	}
 	
+	
+	public Board getParentBoard() {
+		return parentBoard;
+	}
+
+	public void setParentBoard(Board parentBoard) {
+		this.parentBoard = parentBoard;
+	}
+
+	public Board getCorrectBoardBeginningZero() {
+		return correctBoardBeginningZero;
+	}
+
+	public Board getCorrectBoardEndingZero() {
+		return correctBoardEndingZero;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -176,6 +224,6 @@ public class Board implements Cloneable{
 				}
 			}
     	}
-    	return new Board(newBoard, emptyNode, new ArrayList<>(sequenceOfSteps));
+    	return new Board(newBoard, emptyNode, new ArrayList<>(sequenceOfSteps), this.correctBoardBeginningZero, this.correctBoardEndingZero);
     }
 }
