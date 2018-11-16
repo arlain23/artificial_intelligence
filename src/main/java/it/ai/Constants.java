@@ -12,6 +12,10 @@ public class Constants {
 		LEFT, RIGHT, UP, DOWN
 	}
 	
+	public static enum Solver {
+		BFS, DFS, BestFS, IDDFS, AStar, SMAStar
+	}
+	
 	public static enum PuzzleType {
 		eight, fifteen
 	}

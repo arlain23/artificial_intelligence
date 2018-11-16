@@ -12,6 +12,7 @@ import java.util.Set;
 
 import com.google.common.collect.MinMaxPriorityQueue;
 
+import ai.exception.NotSolvableException;
 import ai.puzzle.Board;
 import ai.puzzle.BoardHelper;
 import heuristics.Heuristics;

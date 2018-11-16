@@ -7,6 +7,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
+import ai.exception.NotSolvableException;
 import ai.puzzle.Board;
 import ai.puzzle.BoardHelper;
 import heuristics.Heuristics;

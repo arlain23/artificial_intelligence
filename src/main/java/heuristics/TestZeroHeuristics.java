@@ -6,6 +6,19 @@ import ai.puzzle.Board;
 
 public class TestZeroHeuristics implements Heuristics {
 
+	private static TestZeroHeuristics heuristics = null;
+	
+	private TestZeroHeuristics () {
+		
+	}
+	
+	public static TestZeroHeuristics getInstance() {
+		if (heuristics == null) {
+			heuristics = new TestZeroHeuristics();
+		}
+		return heuristics;
+	}
+	
 	@Override
 	public int getHeuristicsValueBFS(Board board) {
 		return 0;

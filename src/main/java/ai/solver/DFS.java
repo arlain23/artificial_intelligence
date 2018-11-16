@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import javax.management.RuntimeErrorException;
 
+import ai.exception.NotSolvableException;
 import ai.puzzle.Board;
 import ai.puzzle.BoardHelper;
 import heuristics.Heuristics;

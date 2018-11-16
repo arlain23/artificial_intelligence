@@ -6,17 +6,17 @@ import ai.graph.Node;
 import ai.puzzle.Board;
 import it.ai.Constants;
 
-public class ManahatanDistanceHeuristics implements Heuristics{
+public class ManhattanDistanceHeuristics implements Heuristics{
 	
-	private static ManahatanDistanceHeuristics heuristics = null;
+	private static ManhattanDistanceHeuristics heuristics = null;
 	
-	private ManahatanDistanceHeuristics () {
+	private ManhattanDistanceHeuristics () {
 		
 	}
 	
-	public static ManahatanDistanceHeuristics getInstance() {
+	public static ManhattanDistanceHeuristics getInstance() {
 		if (heuristics == null) {
-			heuristics = new ManahatanDistanceHeuristics();
+			heuristics = new ManhattanDistanceHeuristics();
 		}
 		return heuristics;
 	}

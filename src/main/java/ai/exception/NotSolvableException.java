@@ -1,4 +1,4 @@
-package ai.solver;
+package ai.exception;
 
 public class NotSolvableException extends Exception{
 

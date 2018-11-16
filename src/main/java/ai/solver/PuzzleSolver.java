@@ -1,5 +1,6 @@
 package ai.solver;
 
+import ai.exception.NotSolvableException;
 import ai.puzzle.Board;
 import heuristics.Heuristics;
 
