@@ -6,11 +6,11 @@ import java.util.Set;
 import java.util.Stack;
 
 import ai.exception.NotSolvableException;
+import ai.heuristics.Heuristics;
 import common.Constants;
 import common.Constants.Direction;
 import common.puzzle.Board;
 import common.puzzle.BoardHelper;
-import heuristics.Heuristics;
 
 public class IDDFS implements PuzzleSolver {
 	private Board initBoard;

@@ -11,11 +11,11 @@ import java.util.Queue;
 import java.util.Set;
 
 import ai.exception.NotSolvableException;
+import ai.heuristics.Heuristics;
 import common.Constants;
 import common.Constants.Direction;
 import common.puzzle.Board;
 import common.puzzle.BoardHelper;
-import heuristics.Heuristics;
 
 public class SMAStar implements PuzzleSolver{
 	private Board initBoard;
@@ -51,31 +51,22 @@ public class SMAStar implements PuzzleSolver{
 		Set<Board> memory = new HashSet<Board> ();
 		
 		while (!open.isEmpty()) {
-//			System.out.println("################################################## " + open.size());
-			// n node
 			Board currentBoard = open.peek();
-//			System.out.println("I " + (++iterator) + " D: " + currentDepth);
-//			System.out.println();
-//			System.out.println(currentBoard);
 			
 			boolean isCorrect = BoardHelper.checkCorrectness(currentBoard);
 			if (isCorrect) {
-//				System.out.println("CORRECT!! ");
 				return currentBoard;
 			} else {
-				// magic
 				Board successor = null;
 
 				if (successorMap.containsKey(currentBoard)) {
 					List<Board> children = successorMap.get(currentBoard);
-//					System.out.println("IN MAP " + children.size());
 					if (children.size() > 0) {
 						successor = children.get(0);
 						children.remove(successor);
 						successorMap.put(currentBoard, children);
 					}
 				} else {
-//					System.out.println("NEW MAP ");
 					List<Board> children = new ArrayList<Board>();;
 					if (availableSuccessorsMap.containsKey(currentBoard)) {
 						children.addAll(availableSuccessorsMap.get(currentBoard));
@@ -93,8 +84,6 @@ public class SMAStar implements PuzzleSolver{
 					children.remove(successor);
 					successorMap.put(currentBoard, children);
 				}
-//				System.out.println("successor");
-//				System.out.println(successor);
 				
 				if (successor != null) {
 					boolean isChildCorrect = BoardHelper.checkCorrectness(successor);
@@ -120,31 +109,21 @@ public class SMAStar implements PuzzleSolver{
 					backupProcedure(currentBoard);
 					open.remove(currentBoard);
 					closed.remove(currentBoard);
-//					System.out.println("----------backup---------");
 					
 					currentDepth++;
-//					System.out.println("BP " + currentDepth + " " + currentBoard.getSequenceOfSteps().size());
 					if (currentDepth > memoryLimit) {
-						System.out.println("MEMORY LIMIT REACHED ");
-//						System.out.println("NR OF ELEMETS " + open.size());
 						
 						Board removedBoard = closed.poll();
 						open.remove(removedBoard);
 						
-//						System.out.println("F(X) " + removedBoard.getF_x());
-//						System.out.println("depth " + removedBoard.getSequenceOfSteps().size());
 						Board parentBoard = removedBoard.getParentBoard();
 						List<Board> successors = availableSuccessorsMap.get(parentBoard);
 						successors.remove(removedBoard);
-//						System.out.println("SUCC SIZE " + successors.size());
 						availableSuccessorsMap.put(parentBoard, successors);
 						
 						if (successors.size() == 0) {
-//							System.out.println("NO GO");
 							parentBoard.setF_x(Integer.MAX_VALUE);
 						}
-						
-						
 						
 						if (!open.contains(parentBoard)) {
 							open.add(parentBoard);
@@ -157,7 +136,6 @@ public class SMAStar implements PuzzleSolver{
 				
 				
 			}
-//			if ((iterator++) > 200) throw new NotSolvableException("Exceeded number of iterations \n" + this.initBoard);
 		}
 		throw new NotSolvableException("Puzzle is not solvable");
 	}

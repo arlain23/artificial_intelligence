@@ -1,4 +1,4 @@
-package heuristics;
+package ai.heuristics;
 
 import java.util.Comparator;
 

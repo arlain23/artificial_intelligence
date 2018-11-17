@@ -1,4 +1,4 @@
-package it.ai;
+package ai;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +11,10 @@ import ai.exception.UnsupportedHeuristicsException;
 import ai.exception.UnsupportedInputException;
 import ai.exception.UnsupportedOrderException;
 import ai.exception.UnsupportedPuzzleTypeException;
+import ai.heuristics.Heuristics;
+import ai.heuristics.IncorrectPositionHeuristics;
+import ai.heuristics.ManhattanDistanceHeuristics;
+import ai.heuristics.TestZeroHeuristics;
 import ai.solver.AStar;
 import ai.solver.BFS;
 import ai.solver.BestFS;
@@ -23,10 +27,6 @@ import common.Constants.Direction;
 import common.Constants.PuzzleType;
 import common.Constants.Solver;
 import common.puzzle.Board;
-import heuristics.Heuristics;
-import heuristics.IncorrectPositionHeuristics;
-import heuristics.ManhattanDistanceHeuristics;
-import heuristics.TestZeroHeuristics;
 
 /**
  * Hello world!
@@ -52,6 +52,8 @@ public class App
     	initBoard = getBoard();
     	
     	try {
+    		System.out.println(initBoard.getBoardHeight() + " " + initBoard.getBoardWidth());
+    		System.out.println(initBoard.getBoardConfiguration());
 			Board finalBoard = solveBoard(solverType, initBoard, directionOrder, heuristics);
 			System.out.println(finalBoard.getSequenceOfSteps().size());
 			System.out.println(finalBoard.getSequenceOfSteps());
@@ -119,7 +121,7 @@ public class App
 			System.out.println("2/--mand manhattan distance heuristics");
 			System.out.println();
 			System.out.println("Order should be a string containing permutation of elements of set {R,L,U,D} "
-					+ "separated by comma or letter R if it should be random.");
+					+ "without separator or letter R if it should be random.");
 			System.out.println();
 			System.out.println("Input information: In the first line of standard input two integer values R C are given:"
 					+ " row count and column count respectively, defining frame size. "
@@ -139,7 +141,7 @@ public class App
 				//random
 				directionOrder = getRandomDirectionOrder();
 			} else {
-				String[] order = methodParameter.split(",");
+				String[] order = methodParameter.split("");
 				if (order.length != 4) {
 					throw new UnsupportedOrderException(methodParameter);
 				}
@@ -175,8 +177,9 @@ public class App
     	// input
 		PuzzleType puzzleType;
 		Scanner scanner = new Scanner(System.in);
-		String[] size = scanner.nextLine().split("");
-		if (size.length != 2) {
+		String[] size = scanner.nextLine().split(" ");
+		if (size.length < 2) {
+			scanner.close();
 			throw new UnsupportedInputException("");
 		}
 		StringBuilder config = new StringBuilder ();
@@ -188,26 +191,29 @@ public class App
 			} else if (rowCount == 4 && columnCount == 4) {
 				puzzleType = PuzzleType.fifteen;
 			} else {
+				scanner.close();
 				throw new UnsupportedPuzzleTypeException("");
 			}
 			for (int r = 0; r < rowCount; r++) {
 				String[] column = scanner.nextLine().split(" ");
 				if (column.length != columnCount) {
+					scanner.close();
 					throw new UnsupportedInputException("");
 				}
 				for (int c = 0; c < columnCount; c++) {
-					config.append(c);
+					config.append(column[c]);
 					config.append(" ");
 				}
 			}
-			
-			
 		} catch (NumberFormatException e) {
+			scanner.close();
 			throw new UnsupportedInputException("");
 		} catch (NoSuchElementException e) {
+			scanner.close();
 			throw new UnsupportedInputException("");
 		}
 		List<Integer> numbers = InputHelper.getBoardConfiguration(config.toString());
+		scanner.close();
 		return new Board(puzzleType, numbers);
     }
 }

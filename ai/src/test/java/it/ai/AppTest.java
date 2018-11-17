@@ -3,8 +3,11 @@ package it.ai;
 import java.util.ArrayList;
 import java.util.List;
 
+import ai.InputHelper;
 import ai.exception.NotSolvableException;
 import ai.exception.UnsupportedOrderException;
+import ai.heuristics.IncorrectPositionHeuristics;
+import ai.heuristics.ManhattanDistanceHeuristics;
 import ai.solver.AStar;
 import ai.solver.BFS;
 import ai.solver.BestFS;
@@ -15,8 +18,6 @@ import common.Constants.Direction;
 import common.Constants.PuzzleType;
 import common.puzzle.Board;
 import common.puzzle.BoardHelper;
-import heuristics.IncorrectPositionHeuristics;
-import heuristics.ManhattanDistanceHeuristics;
 import junit.framework.TestCase;
 
 /**

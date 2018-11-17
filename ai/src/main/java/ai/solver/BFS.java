@@ -7,10 +7,10 @@ import java.util.Queue;
 import java.util.Set;
 
 import ai.exception.NotSolvableException;
+import ai.heuristics.Heuristics;
 import common.Constants.Direction;
 import common.puzzle.Board;
 import common.puzzle.BoardHelper;
-import heuristics.Heuristics;
 
 public class BFS implements PuzzleSolver{
 	private Board initBoard;

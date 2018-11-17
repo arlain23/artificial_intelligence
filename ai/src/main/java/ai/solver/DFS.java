@@ -6,11 +6,11 @@ import java.util.Set;
 import java.util.Stack;
 
 import ai.exception.NotSolvableException;
+import ai.heuristics.Heuristics;
 import common.Constants;
 import common.Constants.Direction;
 import common.puzzle.Board;
 import common.puzzle.BoardHelper;
-import heuristics.Heuristics;
 
 public class DFS implements PuzzleSolver{
 	private Board initBoard;
@@ -28,7 +28,6 @@ public class DFS implements PuzzleSolver{
 		Stack<Board> stack = new Stack<>();
 		stack.push(this.initBoard);
 		
-		System.out.println("Solve with stack");
 		while (!stack.isEmpty()) {
 			Board currentBoard = stack.pop();
 			history.add(currentBoard);
