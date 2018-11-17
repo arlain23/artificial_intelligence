@@ -32,3 +32,8 @@ fabric.properties
 *.iml
 modules.xml
 *.ipr
+*.pdf
+Report-blx.bib
+Report.run.xml
+__latexindent_temp.tex
+Report.synctex.gz
