@@ -3,8 +3,7 @@ package heuristics;
 import java.util.Comparator;
 import java.util.List;
 
-import ai.puzzle.Board;
-import it.ai.Constants;
+import common.puzzle.Board;
 
 public class IncorrectPositionHeuristics implements Heuristics{
 	

@@ -1,19 +1,16 @@
 package ai.solver;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import javax.management.RuntimeErrorException;
-
 import ai.exception.NotSolvableException;
-import ai.puzzle.Board;
-import ai.puzzle.BoardHelper;
+import common.Constants;
+import common.Constants.Direction;
+import common.puzzle.Board;
+import common.puzzle.BoardHelper;
 import heuristics.Heuristics;
-import it.ai.Constants;
-import it.ai.Constants.Direction;
 
 public class DFS implements PuzzleSolver{
 	private Board initBoard;

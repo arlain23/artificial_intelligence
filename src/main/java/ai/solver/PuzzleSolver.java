@@ -1,7 +1,7 @@
 package ai.solver;
 
 import ai.exception.NotSolvableException;
-import ai.puzzle.Board;
+import common.puzzle.Board;
 import heuristics.Heuristics;
 
 public interface PuzzleSolver {

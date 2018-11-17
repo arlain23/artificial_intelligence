@@ -2,7 +2,7 @@ package heuristics;
 
 import java.util.Comparator;
 
-import ai.puzzle.Board;
+import common.puzzle.Board;
 
 public interface Heuristics {
 	

@@ -3,22 +3,20 @@ package it.ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement;
-
 import ai.exception.NotSolvableException;
 import ai.exception.UnsupportedOrderException;
-import ai.puzzle.Board;
-import ai.puzzle.BoardHelper;
 import ai.solver.AStar;
 import ai.solver.BFS;
 import ai.solver.BestFS;
-import ai.solver.DFS;
 import ai.solver.IDDFS;
 import ai.solver.SMAStar;
+import common.Constants;
+import common.Constants.Direction;
+import common.Constants.PuzzleType;
+import common.puzzle.Board;
+import common.puzzle.BoardHelper;
 import heuristics.IncorrectPositionHeuristics;
 import heuristics.ManhattanDistanceHeuristics;
-import it.ai.Constants.Direction;
-import it.ai.Constants.PuzzleType;
 import junit.framework.TestCase;
 
 /**
@@ -32,53 +30,53 @@ public class AppTest
 		Board board;
 		List<Direction> sequenceOfSteps;
 		try {
-//		board = new Board(PuzzleType.eight, TestHelper.getBoardConfiguration("1 2 3 4 0 5 7 8 6"));
-//		sequenceOfSteps = TestHelper.getSequenceOfSteps("RD");
+		board = new Board(PuzzleType.eight, InputHelper.getBoardConfiguration("1 2 3 4 0 5 7 8 6"));
+		sequenceOfSteps = InputHelper.getSequenceOfSteps("RD");
+		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//		
+//		board = new Board(3, 3, InputHelper.getBoardConfiguration("4 1 3 7 2 6 5 8 0"));
+//		sequenceOfSteps = InputHelper.getSequenceOfSteps("LLUURDDR");
 //		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 //		
-//		board = new Board(3, 3, TestHelper.getBoardConfiguration("4 1 3 7 2 6 5 8 0"));
-//		sequenceOfSteps = TestHelper.getSequenceOfSteps("LLUURDDR");
+//		board = new Board(3, 3, InputHelper.getBoardConfiguration("1 2 3 4 8 0 7 6 5"));
+//		sequenceOfSteps = InputHelper.getSequenceOfSteps("DLURD");
 //		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 //		
-//		board = new Board(3, 3, TestHelper.getBoardConfiguration("1 2 3 4 8 0 7 6 5"));
-//		sequenceOfSteps = TestHelper.getSequenceOfSteps("DLURD");
+//		board = new Board(3, 3, InputHelper.getBoardConfiguration("1 2 6 3 5 0 4 7 8"));
+//		sequenceOfSteps = InputHelper.getSequenceOfSteps("ULDLDRRULURDD");
 //		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 //		
-//		board = new Board(3, 3, TestHelper.getBoardConfiguration("1 2 6 3 5 0 4 7 8"));
-//		sequenceOfSteps = TestHelper.getSequenceOfSteps("ULDLDRRULURDD");
+//		board = new Board(3, 3, InputHelper.getBoardConfiguration("4 3 6 8 7 1 0 5 2"));
+//		sequenceOfSteps = InputHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
 //		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 //		
-//		board = new Board(3, 3, TestHelper.getBoardConfiguration("4 3 6 8 7 1 0 5 2"));
-//		sequenceOfSteps = TestHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
+//		board = new Board(3, 3, InputHelper.getBoardConfiguration("4 3 6 8 7 1 0 5 2"));
+//		sequenceOfSteps = InputHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
 //		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 //		
-//		board = new Board(3, 3, TestHelper.getBoardConfiguration("4 3 6 8 7 1 0 5 2"));
-//		sequenceOfSteps = TestHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
-//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-//		
-//		board = new Board(3, 3, TestHelper.getBoardConfiguration("8 7 6 5 4 3 0 2 1"));
-//		sequenceOfSteps = TestHelper.getSequenceOfSteps("UURDRDLLUURDRULDDRULDLUURDRD");
+//		board = new Board(3, 3, InputHelper.getBoardConfiguration("8 7 6 5 4 3 0 2 1"));
+//		sequenceOfSteps = InputHelper.getSequenceOfSteps("UURDRDLLUURDRULDDRULDLUURDRD");
 //		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 		
-			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("5 1 7 3 9 2 11 4 13 6 15 8 0 10 14 12"));
-			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
-			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("5 1 7 3 9 2 11 4 13 6 15 8 0 10 14 12"));
+//			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
+//			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//			
+//			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("2 5 13 12 1 0 3 15 9 7 14 6 10 11 8 4"));
+//			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
+//			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//			
+//			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("5 2 4 8 10 0 3 14 13 6 11 12 1 15 9 7"));
+//			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
+//			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//			
+//			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("11 4 12 2 5 10 3 15 14 1 6 7 0 9 8 13"));
+//			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
+//			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 			
-			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("2 5 13 12 1 0 3 15 9 7 14 6 10 11 8 4"));
-			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
-			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-			
-			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("5 2 4 8 10 0 3 14 13 6 11 12 1 15 9 7"));
-			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
-			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-			
-			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("11 4 12 2 5 10 3 15 14 1 6 7 0 9 8 13"));
-			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
-			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-			
-			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("5 8 7 11 1 6 12 2 9 0 13 10 14 3 4 15"));
-			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
-			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("5 8 7 11 1 6 12 2 9 0 13 10 14 3 4 15"));
+//			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
+//			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 		} catch (UnsupportedOrderException e) {
 			e.printStackTrace();
 		}

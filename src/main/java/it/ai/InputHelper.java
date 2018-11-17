@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ai.exception.UnsupportedOrderException;
-import it.ai.Constants.Direction;
+import common.Constants.Direction;
 
 public class InputHelper {
 	public static List<Integer> getBoardConfiguration(String numbers) {

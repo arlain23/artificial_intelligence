@@ -8,10 +8,10 @@ import java.util.Queue;
 import java.util.Set;
 
 import ai.exception.NotSolvableException;
-import ai.puzzle.Board;
-import ai.puzzle.BoardHelper;
+import common.Constants.Direction;
+import common.puzzle.Board;
+import common.puzzle.BoardHelper;
 import heuristics.Heuristics;
-import it.ai.Constants.Direction;
 
 public class BestFS implements PuzzleSolver {
 	private Board initBoard;

@@ -2,8 +2,8 @@ package it.ai;
 
 import java.util.List;
 
-import ai.puzzle.Board;
-import it.ai.Constants.Direction;
+import common.Constants.Direction;
+import common.puzzle.Board;
 
 public class TestSolution {
 	private Board board;

@@ -1,12 +1,9 @@
 package it.ai;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-
-import com.sun.corba.se.spi.orbutil.fsm.Input;
 
 import ai.exception.NotSolvableException;
 import ai.exception.UnsupportedArgumentsException;
@@ -14,7 +11,6 @@ import ai.exception.UnsupportedHeuristicsException;
 import ai.exception.UnsupportedInputException;
 import ai.exception.UnsupportedOrderException;
 import ai.exception.UnsupportedPuzzleTypeException;
-import ai.puzzle.Board;
 import ai.solver.AStar;
 import ai.solver.BFS;
 import ai.solver.BestFS;
@@ -22,13 +18,15 @@ import ai.solver.DFS;
 import ai.solver.IDDFS;
 import ai.solver.PuzzleSolver;
 import ai.solver.SMAStar;
+import common.Constants;
+import common.Constants.Direction;
+import common.Constants.PuzzleType;
+import common.Constants.Solver;
+import common.puzzle.Board;
 import heuristics.Heuristics;
 import heuristics.IncorrectPositionHeuristics;
 import heuristics.ManhattanDistanceHeuristics;
 import heuristics.TestZeroHeuristics;
-import it.ai.Constants.Direction;
-import it.ai.Constants.PuzzleType;
-import it.ai.Constants.Solver;
 
 /**
  * Hello world!

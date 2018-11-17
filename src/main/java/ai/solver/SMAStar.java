@@ -10,14 +10,12 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
-import com.google.common.collect.MinMaxPriorityQueue;
-
 import ai.exception.NotSolvableException;
-import ai.puzzle.Board;
-import ai.puzzle.BoardHelper;
+import common.Constants;
+import common.Constants.Direction;
+import common.puzzle.Board;
+import common.puzzle.BoardHelper;
 import heuristics.Heuristics;
-import it.ai.Constants;
-import it.ai.Constants.Direction;
 
 public class SMAStar implements PuzzleSolver{
 	private Board initBoard;

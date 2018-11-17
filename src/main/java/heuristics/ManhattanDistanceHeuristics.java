@@ -2,9 +2,8 @@ package heuristics;
 
 import java.util.Comparator;
 
-import ai.graph.Node;
-import ai.puzzle.Board;
-import it.ai.Constants;
+import common.graph.Node;
+import common.puzzle.Board;
 
 public class ManhattanDistanceHeuristics implements Heuristics{
 	
