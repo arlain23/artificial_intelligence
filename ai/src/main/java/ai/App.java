@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import com.google.common.base.Joiner;
+
 import ai.exception.NotSolvableException;
 import ai.exception.UnsupportedArgumentsException;
 import ai.exception.UnsupportedHeuristicsException;
-import ai.exception.UnsupportedInputException;
 import ai.exception.UnsupportedOrderException;
-import ai.exception.UnsupportedPuzzleTypeException;
 import ai.heuristics.Heuristics;
 import ai.heuristics.IncorrectPositionHeuristics;
 import ai.heuristics.ManhattanDistanceHeuristics;
@@ -26,6 +26,8 @@ import common.Constants;
 import common.Constants.Direction;
 import common.Constants.PuzzleType;
 import common.Constants.Solver;
+import common.exception.UnsupportedInputException;
+import common.exception.UnsupportedPuzzleTypeException;
 import common.puzzle.Board;
 
 /**
@@ -51,12 +53,12 @@ public class App
     	}
     	initBoard = getBoard();
     	
+    	System.out.println(initBoard.getBoardHeight() + " " + initBoard.getBoardWidth());
+    	System.out.println(Joiner.on(',').join(initBoard.getBoardConfiguration()));
     	try {
-    		System.out.println(initBoard.getBoardHeight() + " " + initBoard.getBoardWidth());
-    		System.out.println(initBoard.getBoardConfiguration());
 			Board finalBoard = solveBoard(solverType, initBoard, directionOrder, heuristics);
 			System.out.println(finalBoard.getSequenceOfSteps().size());
-			System.out.println(finalBoard.getSequenceOfSteps());
+			System.out.println(Joiner.on(',').join(finalBoard.getSequenceOfSteps()));
 		} catch (NotSolvableException e) {
 			System.out.println("-1");
 		}

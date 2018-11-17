@@ -1,4 +1,4 @@
-package ai.exception;
+package common.exception;
 
 public class UnsupportedInputException extends Exception{
 
