@@ -28,7 +28,6 @@ public class SMAStar implements PuzzleSolver{
 	
 	@Override
 	public Board solve(Heuristics heuristics) throws NotSolvableException {
-		Set<Board> history = new HashSet<>();
 		Comparator<Board> comparator = heuristics.getSMAStarComparator();
 		Comparator<Board> reversedComparator = heuristics.getSMAStarComparator().reversed();
 		
@@ -42,19 +41,18 @@ public class SMAStar implements PuzzleSolver{
 		int currentDepth = 1;
 
 		
-		int iterator = 0;
-		
 		Map<Board, List<Board>> availableSuccessorsMap = new HashMap<Board, List<Board>> ();
-		Map<Board, List<Board>> successorMap = new HashMap<Board, List<Board>> ();
-		Queue<Board> currentSuccessorQueue = null; 
-
-		Set<Board> memory = new HashSet<Board> ();
+//		availableSuccessorsMap.put(this.initBoard, BoardHelper.getChildren(initBoard, directionOrder));
 		
+		Map<Board, List<Board>> successorMap = new HashMap<Board, List<Board>> ();
+		int iterator = 0;
 		while (!open.isEmpty()) {
+			iterator++;
 			Board currentBoard = open.peek();
 			
 			boolean isCorrect = BoardHelper.checkCorrectness(currentBoard);
 			if (isCorrect) {
+				System.out.println("I " + iterator);
 				return currentBoard;
 			} else {
 				Board successor = null;
@@ -67,7 +65,7 @@ public class SMAStar implements PuzzleSolver{
 						successorMap.put(currentBoard, children);
 					}
 				} else {
-					List<Board> children = new ArrayList<Board>();;
+					List<Board> children = new ArrayList<Board>();
 					if (availableSuccessorsMap.containsKey(currentBoard)) {
 						children.addAll(availableSuccessorsMap.get(currentBoard));
 						
@@ -76,15 +74,10 @@ public class SMAStar implements PuzzleSolver{
 						children.addAll(successorList);
 						availableSuccessorsMap.put(currentBoard, successorList);
 					}
-					
-					currentSuccessorQueue = new PriorityQueue<Board>(comparator); 
-					currentSuccessorQueue.addAll(children);
-					
 					successor = children.get(0);
 					children.remove(successor);
 					successorMap.put(currentBoard, children);
 				}
-				
 				if (successor != null) {
 					boolean isChildCorrect = BoardHelper.checkCorrectness(successor);
 					int childDepth = successor.getSequenceOfSteps().size();
@@ -106,7 +99,7 @@ public class SMAStar implements PuzzleSolver{
 					closed.add(successor);
 				} else {
 					// all children processed 
-					backupProcedure(currentBoard);
+					backupProcedure(currentBoard, availableSuccessorsMap);
 					open.remove(currentBoard);
 					closed.remove(currentBoard);
 					
@@ -121,15 +114,15 @@ public class SMAStar implements PuzzleSolver{
 						successors.remove(removedBoard);
 						availableSuccessorsMap.put(parentBoard, successors);
 						
-						if (successors.size() == 0) {
-							parentBoard.setF_x(Integer.MAX_VALUE);
-						}
-						
 						if (!open.contains(parentBoard)) {
 							open.add(parentBoard);
 							closed.add(parentBoard);
+						} else {
+							currentDepth--;
 						}
-						currentDepth--;
+						if (successors.size() == 0) {
+							parentBoard.setF_x(Integer.MAX_VALUE);
+						}
 					}
 					
 				}
@@ -140,8 +133,8 @@ public class SMAStar implements PuzzleSolver{
 		throw new NotSolvableException("Puzzle is not solvable");
 	}
 	
-	private void backupProcedure(Board board) {
-		List<Board> children = BoardHelper.getChildren(board, directionOrder);
+	private void backupProcedure(Board board, Map<Board, List<Board>> availableSuccessorsMap) {
+		List<Board> children = availableSuccessorsMap.get(board);
 		int leastFcost = Integer.MAX_VALUE;
 		for (Board child : children) {
 			int currentFCost = child.getF_x();
@@ -153,7 +146,10 @@ public class SMAStar implements PuzzleSolver{
 		int f_x = board.getF_x();
 		if (f_x != leastFcost) {
 			board.setF_x(leastFcost);
-			backupProcedure(board.getParentBoard());
+			Board parentBoard = board.getParentBoard();
+			if (parentBoard != null) {
+				backupProcedure(parentBoard, availableSuccessorsMap);
+			}
 		}
 		
 	}

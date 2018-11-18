@@ -33,10 +33,12 @@ public class AStar implements PuzzleSolver{
 		
 		int iterator = 0;
 		while (!queue.isEmpty()) {
+			iterator++;
 			Board currentBoard = queue.poll();
 			
 			boolean isCorrect = BoardHelper.checkCorrectness(currentBoard);
 			if (isCorrect) {
+				System.out.println("I " + iterator);
 				return currentBoard;
 			} else {
 				List<Board> children = BoardHelper.getChildren(currentBoard, directionOrder);

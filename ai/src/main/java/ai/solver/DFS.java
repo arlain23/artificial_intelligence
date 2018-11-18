@@ -28,11 +28,15 @@ public class DFS implements PuzzleSolver{
 		Stack<Board> stack = new Stack<>();
 		stack.push(this.initBoard);
 		
+		int iterator = 0;
 		while (!stack.isEmpty()) {
+			iterator++;
+			
 			Board currentBoard = stack.pop();
 			history.add(currentBoard);
 			boolean isCorrect = BoardHelper.checkCorrectness(currentBoard);
 			if (isCorrect) {
+				System.out.println("I: " + iterator);
 				return currentBoard;
 			} else {
 				// check of depth
@@ -45,7 +49,6 @@ public class DFS implements PuzzleSolver{
 					}
 				}
 			}
-			if ((iterator++) > 181440) throw new NotSolvableException("Exceeded number of iterations \n" + this.initBoard);
 		}
 		throw new NotSolvableException("Not solvable");
 	}

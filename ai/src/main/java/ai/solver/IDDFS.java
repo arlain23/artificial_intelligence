@@ -24,9 +24,11 @@ public class IDDFS implements PuzzleSolver {
 	@Override
 	public Board solve(Heuristics heuristics) throws NotSolvableException {
 		int depth = 0;
+		int iterator = 0;
 		while (depth < Constants.MAX_DEPTH) {
 			depth++;
-		
+			iterator++;
+			
 			Set<Board> history = new HashSet<Board>();
 			Stack<Board> stack = new Stack<>();
 			stack.push(this.initBoard);
@@ -36,6 +38,7 @@ public class IDDFS implements PuzzleSolver {
 				history.add(currentBoard);
 				boolean isCorrect = BoardHelper.checkCorrectness(currentBoard);
 				if (isCorrect) {
+					System.out.println("I: " + iterator);
 					return currentBoard;
 				} else {
 					// check of depth

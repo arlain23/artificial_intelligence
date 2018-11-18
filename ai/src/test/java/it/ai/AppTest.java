@@ -8,9 +8,11 @@ import ai.exception.NotSolvableException;
 import ai.exception.UnsupportedOrderException;
 import ai.heuristics.IncorrectPositionHeuristics;
 import ai.heuristics.ManhattanDistanceHeuristics;
+import ai.heuristics.TestZeroHeuristics;
 import ai.solver.AStar;
 import ai.solver.BFS;
 import ai.solver.BestFS;
+import ai.solver.DFS;
 import ai.solver.IDDFS;
 import ai.solver.SMAStar;
 import common.Constants;
@@ -31,33 +33,33 @@ public class AppTest
 		Board board;
 		List<Direction> sequenceOfSteps;
 		try {
-		board = new Board(PuzzleType.eight, InputHelper.getBoardConfiguration("1 2 3 4 0 5 7 8 6"));
-		sequenceOfSteps = InputHelper.getSequenceOfSteps("RD");
-		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-//		
-//		board = new Board(3, 3, InputHelper.getBoardConfiguration("4 1 3 7 2 6 5 8 0"));
-//		sequenceOfSteps = InputHelper.getSequenceOfSteps("LLUURDDR");
-//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-//		
-//		board = new Board(3, 3, InputHelper.getBoardConfiguration("1 2 3 4 8 0 7 6 5"));
-//		sequenceOfSteps = InputHelper.getSequenceOfSteps("DLURD");
-//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-//		
-//		board = new Board(3, 3, InputHelper.getBoardConfiguration("1 2 6 3 5 0 4 7 8"));
-//		sequenceOfSteps = InputHelper.getSequenceOfSteps("ULDLDRRULURDD");
-//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-//		
-//		board = new Board(3, 3, InputHelper.getBoardConfiguration("4 3 6 8 7 1 0 5 2"));
-//		sequenceOfSteps = InputHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
-//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-//		
-//		board = new Board(3, 3, InputHelper.getBoardConfiguration("4 3 6 8 7 1 0 5 2"));
-//		sequenceOfSteps = InputHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
-//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-//		
-//		board = new Board(3, 3, InputHelper.getBoardConfiguration("8 7 6 5 4 3 0 2 1"));
-//		sequenceOfSteps = InputHelper.getSequenceOfSteps("UURDRDLLUURDRULDDRULDLUURDRD");
-//		TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//			board = new Board(PuzzleType.eight, InputHelper.getBoardConfiguration("1 2 3 4 0 5 7 8 6"));
+//			sequenceOfSteps = InputHelper.getSequenceOfSteps("RD");
+//			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+			
+//			board = new Board(PuzzleType.eight, InputHelper.getBoardConfiguration("4 1 3 7 2 6 5 8 0"));
+//			sequenceOfSteps = InputHelper.getSequenceOfSteps("LLUURDDR");
+//			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//			
+//			board = new Board(PuzzleType.eight, InputHelper.getBoardConfiguration("1 2 3 4 8 0 7 6 5"));
+//			sequenceOfSteps = InputHelper.getSequenceOfSteps("DLURD");
+//			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//			
+//			board = new Board(PuzzleType.eight, InputHelper.getBoardConfiguration("1 2 6 3 5 0 4 7 8"));
+//			sequenceOfSteps = InputHelper.getSequenceOfSteps("ULDLDRRULURDD");
+//			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//			
+//			board = new Board(PuzzleType.eight, InputHelper.getBoardConfiguration("4 3 6 8 7 1 0 5 2"));
+//			sequenceOfSteps = InputHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
+//			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+////			
+//			board = new Board(PuzzleType.eight, InputHelper.getBoardConfiguration("4 3 6 8 7 1 0 5 2"));
+//			sequenceOfSteps = InputHelper.getSequenceOfSteps("URRULDDRULDLUURDRD");
+//			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
+//			
+			board = new Board(PuzzleType.eight, InputHelper.getBoardConfiguration("8 7 6 5 4 3 0 2 1"));
+			sequenceOfSteps = InputHelper.getSequenceOfSteps("UURDRDLLUURDRULDDRULDLUURDRD");
+			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
 		
 //			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("5 1 7 3 9 2 11 4 13 6 15 8 0 10 14 12"));
 //			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
@@ -74,7 +76,7 @@ public class AppTest
 //			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("11 4 12 2 5 10 3 15 14 1 6 7 0 9 8 13"));
 //			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
 //			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
-			
+//			
 //			board = new Board(PuzzleType.fifteen, InputHelper.getBoardConfiguration("5 8 7 11 1 6 12 2 9 0 13 10 14 3 4 15"));
 //			sequenceOfSteps = InputHelper.getSequenceOfSteps("R");
 //			TEST_BOARDS.add(new TestSolution(board, sequenceOfSteps));
@@ -82,35 +84,22 @@ public class AppTest
 			e.printStackTrace();
 		}
 	}
-/*
- board  | number of moves | solution(s)
-123405786	2		RD
-123745086	4		URRD
-123480765	5		DLURD
-413726580	8		LLUURDDR
-162530478	9		LURDLLDRR
-512630478	11		LLURRDLLDRR
-126350478	13		ULDLDRRULURDD
-356148072	16		RRUULLDRDRUULDRD
-436871052	18		URRULDDRULDLUURDRD
-302651478	21		DRULDLURRDLLDRRULURDD or DLURDRULDLURDRULDLDRR
-012345678	22		RDLDRRULLDRUURDDLLURRD or DRRULLDDRUURDLLURRDLDR
-503284671	23		LDDRRULLDRRULLDRUULDDRR
-874320651	25		DLULURDRULDDLUURDRDLLURRD
-876543021	28		UURDRDLLUURDRULDDRULDLUURDRD or UURDLDRURDLLUURDRULDDLUURDDR
-876543210
-	
- */
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
     public AppTest( String testName )
     {
         super( testName );
     }
 
+    public void checkMemory(){
+    	 // Get the Java runtime
+        Runtime runtime = Runtime.getRuntime();
+        // Run the garbage collector
+        runtime.gc();
+        // Calculate the used memory
+        long memory = runtime.totalMemory() - runtime.freeMemory();
+
+        System.out.println("Used memory: " + + memory + "B  " + (memory / 1024L) + " KB");
+        		
+    }
     public void testBFS() {
     	int iterator = 0;
     	for (TestSolution testSolution : TEST_BOARDS) {
@@ -127,24 +116,26 @@ public class AppTest
 			}
     		
     	}
+    	checkMemory();
     }
     
-//    public void testDFS() {
-//    	int iterator = 0;
-//    	for (TestSolution testSolution : TEST_BOARDS) {
-//    		System.out.println("TEST DFS" + (++iterator));
-//    		Board board = testSolution.getBoard();
-//    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
-//    		DFS dfs = new DFS(board, Constants.DIRECTION_ORDER);
-//    		try {
-//				Board solvedBoard = dfs.solve(null);
-//				testSingleBoard(solvedBoard, sequenceOfSteps);
-//			} catch (NotSolvableException e) {
-//				fail();
-//			}
-//    		
-//    	}
-//    }
+    public void testDFS() {
+    	int iterator = 0;
+    	for (TestSolution testSolution : TEST_BOARDS) {
+    		System.out.println("TEST DFS" + (++iterator));
+    		Board board = testSolution.getBoard();
+    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+    		DFS dfs = new DFS(board, Constants.DIRECTION_ORDER);
+    		try {
+				Board solvedBoard = dfs.solve(null);
+				testSingleBoard(solvedBoard, sequenceOfSteps);
+			} catch (NotSolvableException e) {
+				fail();
+			}
+    		
+    	}
+    	checkMemory();
+    }
     
     public void testIDDFS() {
     	int iterator = 0;
@@ -161,12 +152,29 @@ public class AppTest
 			}
     		
     	}
+    	checkMemory();
     }
     
-    public void testBestFS() {
+//    public void testBestFSHeuristicsZero() {
+//    	int iterator = 0;
+//    	for (TestSolution testSolution : TEST_BOARDS) {
+//    		System.out.println("TEST BestFS 0" + (++iterator));
+//    		Board board = testSolution.getBoard();
+//    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+//    		BestFS bfs = new BestFS(board, Constants.DIRECTION_ORDER);
+//    		try {
+//				Board solvedBoard = bfs.solve(TestZeroHeuristics.getInstance());
+//				testSingleBoard(solvedBoard, sequenceOfSteps);
+//			} catch (NotSolvableException e) {
+//				fail();
+//			}
+//    		
+//    	}
+//    }
+    public void testBestFSHeuristicsIncorrectPosition() {
     	int iterator = 0;
     	for (TestSolution testSolution : TEST_BOARDS) {
-    		System.out.println("TEST BestFS " + (++iterator));
+    		System.out.println("TEST BestFS incorrect" + (++iterator));
     		Board board = testSolution.getBoard();
     		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
     		BestFS bfs = new BestFS(board, Constants.DIRECTION_ORDER);
@@ -178,12 +186,63 @@ public class AppTest
 			}
     		
     	}
+    	checkMemory();
     }
-    
-    public void testAStar() {
+    public void testBestFSHeuristicsManhattanDistance() {
     	int iterator = 0;
     	for (TestSolution testSolution : TEST_BOARDS) {
-    		System.out.println("TEST A* " + (++iterator));
+    		System.out.println("TEST BestFS manh" + (++iterator));
+    		Board board = testSolution.getBoard();
+    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+    		BestFS bfs = new BestFS(board, Constants.DIRECTION_ORDER);
+    		try {
+				Board solvedBoard = bfs.solve(ManhattanDistanceHeuristics.getInstance());
+				testSingleBoard(solvedBoard, sequenceOfSteps);
+			} catch (NotSolvableException e) {
+				fail();
+			}
+    		
+    	}
+    	checkMemory();
+    }
+    
+//    public void testAStarHeuristicsZero() {
+//    	int iterator = 0;
+//    	for (TestSolution testSolution : TEST_BOARDS) {
+//    		System.out.println("TEST A* " + (++iterator));
+//    		Board board = testSolution.getBoard();
+//    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+//    		AStar aStar = new AStar(board, Constants.DIRECTION_ORDER);
+//    		try {
+//				Board solvedBoard = aStar.solve(TestZeroHeuristics.getInstance());
+//				testSingleBoard(solvedBoard, sequenceOfSteps);
+//			} catch (NotSolvableException e) {
+//				fail();
+//			}
+//    		
+//    	}
+//    }
+    public void testAStarHeuristicsIncorrectPosition() {
+    	int iterator = 0;
+    	for (TestSolution testSolution : TEST_BOARDS) {
+    		System.out.println("TEST A* incorrect" + (++iterator));
+    		Board board = testSolution.getBoard();
+    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+    		AStar aStar = new AStar(board, Constants.DIRECTION_ORDER);
+    		try {
+				Board solvedBoard = aStar.solve(IncorrectPositionHeuristics.getInstance());
+				testSingleBoard(solvedBoard, sequenceOfSteps);
+			} catch (NotSolvableException e) {
+				fail();
+			}
+    		
+    	}
+    	checkMemory();
+    }
+    public void testAStarHeuristicsManhattanDistance() {
+    	int iterator = 0;
+    	for (TestSolution testSolution : TEST_BOARDS) {
+    		System.out.println("TEST A* manh" + (++iterator));
     		Board board = testSolution.getBoard();
     		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
     		AStar aStar = new AStar(board, Constants.DIRECTION_ORDER);
@@ -195,12 +254,50 @@ public class AppTest
 			}
     		
     	}
+    	checkMemory();
     }
     
-    public void testSMAStar() {
+//    public void testSMAStarHeuristicsZero() {
+//    	int iterator = 0;
+//    	for (TestSolution testSolution : TEST_BOARDS) {
+//    		System.out.println("TEST SMA* 0" + (++iterator));
+//    		Board board = testSolution.getBoard();
+//    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+//    		SMAStar smaStar = new SMAStar(board, Constants.DIRECTION_ORDER);
+//    		try {
+//				Board solvedBoard = smaStar.solve(TestZeroHeuristics.getInstance());
+//				testSingleBoard(solvedBoard, sequenceOfSteps);
+//			} catch (NotSolvableException e) {
+//				System.out.println(e.getLocalizedMessage());
+//				fail();
+//			}
+//    		
+//    	}
+//    }
+    
+    public void testSMAStarHeuristicsIncorrectPosition() {
     	int iterator = 0;
     	for (TestSolution testSolution : TEST_BOARDS) {
-    		System.out.println("TEST SMA* " + (++iterator));
+    		System.out.println("TEST SMA* incorr" + (++iterator));
+    		Board board = testSolution.getBoard();
+    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+    		SMAStar smaStar = new SMAStar(board, Constants.DIRECTION_ORDER);
+    		try {
+				Board solvedBoard = smaStar.solve(IncorrectPositionHeuristics.getInstance());
+				testSingleBoard(solvedBoard, sequenceOfSteps);
+			} catch (NotSolvableException e) {
+				System.out.println(e.getLocalizedMessage());
+				fail();
+			}
+    		
+    	}
+    	checkMemory();
+    }
+    
+    public void testSMAStarHeuristicsManhattanDistance() {
+    	int iterator = 0;
+    	for (TestSolution testSolution : TEST_BOARDS) {
+    		System.out.println("TEST SMA* manh" + (++iterator));
     		Board board = testSolution.getBoard();
     		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
     		SMAStar smaStar = new SMAStar(board, Constants.DIRECTION_ORDER);
@@ -213,12 +310,14 @@ public class AppTest
 			}
     		
     	}
+    	checkMemory();
     }
     
     private void testSingleBoard(Board board, List<Direction> sequenceOfSteps) {
+    	System.out.println("LENGTH sol: " + sequenceOfSteps.size());
     	boolean isSolved = BoardHelper.isArrangementCorrect(board);
     	boolean areSequencesEqual = areSequencesEqual(sequenceOfSteps, board.getSequenceOfSteps());
-    	System.out.println("SEQUENCES EQUAL " + areSequencesEqual);
+//    	System.out.println("SEQUENCES EQUAL " + areSequencesEqual);
     	assertTrue(isSolved);
     }
 

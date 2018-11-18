@@ -3,12 +3,19 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{graphicx}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{longtable}
 \usepackage{indentfirst}
 \usepackage[margin=2.5cm]{geometry}
 \usepackage[hidelinks]{hyperref}
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{pgfplots}
+
+
 
 \graphicspath{ {./images/} }
 
@@ -128,12 +135,12 @@ Simplified Memory Bounded A* is the successor of MA* which takes the concept of 
 
 \subsection{Language}
 
-The program has been written in Eclipse IDE using Java programming language with JDK 8.
+The project was written in Eclipse IDE using Java programming language with JDK 8. It was created with use of Apache Maven to handle dependencies between sub-projects and external libraries. 
 
 \subsection{Functional requirements}
 \subsubsection{Command line arguments}
 
-The program can be started from the command line and takes the following parameters:
+The first program can be started from the command line and it takes the following parameters:
 
 \begin{itemize}
     \item -b / --bfs order (BFS)
@@ -157,9 +164,9 @@ Best-first search, A* and SMA* require an ID of a heuristic to be passed. The im
     \item 2 / --mand (Manhattan distance heuristics)
 \end{itemize}
 
-Zero heuristics means that every node answers with a value of 0, which means that every node is considered as good as the others.
+Zero heuristics means that every node answers with a value of 0, which implies that every node is considered as good as the others.
 
-Incorrect position heuristics calculates how many tiles are in the wrong position - the less the value of the function, the better the tile is.
+Incorrect position heuristics calculates how many tiles are in the wrong position - the less the value of the function, the better the tile configuration is.
 
 Manhattan distance heuristics answers with the sum of distances from each tile's position to its correct place applying the Manhattan distance formula:
 
@@ -173,17 +180,124 @@ where $d$ is the distance, $p$ and $q$ are the considered vectors and $(p_1, p_2
 
 In the first line of standard input two integer values, R C are given: row count and column count, respectively, defining frame size. Subsequent R lines of standard input contain C space separated integer values describing a piece in the puzzle. Value 0 denotes the empty space in the given frame.
 
-\subsubsection{Viewer}
-
-Additionally, the second small program has been created, namely a ``viewer''. The viewer allows users to see what moves were performed to arrive at a solved board.
-
 \subsubsection{Output}
 
 When the first program finishes its work, it displays four lines of text. In the first line, a size of the puzzle is shown (rows $\times$ columns). The second line contains the initial order of tiles in the board. The third line contains the length of the sequence of moves leading to a correct solution, whereas the fourth line is filled with the aforementioned sequence of moves.
 
-The same information is also saved to a file which can be used by the viewer, where each consecutive permutation, i.e. the state of the board, is displayed every second.
+\subsubsection{Viewer}
 
-\section{Results of experiments and analysis of the algorithms}
+Additionally, the second small program has been created, namely a ``viewer''. The viewer allows users to see what moves were performed to arrive at a solved board. It takes as an input an output of the first program and displays subsequent tiles configurations one step per second.
+
+\subsection {Algorithm details}
+
+\subsubsection{Breadth-first search (BFS)}
+
+In the project BFS was implemented with use of a Queue collection that order elements in a FIFO (first-in-first-out) manner. Before the first iteration of the algorithm a root node of a graph is added to the queue. Then, for each element of the queue, a function checks whether the tile configuration is correct. If not, for a current element, children configurations are generated according to the given order of movement directions and added to the queue. Furthermore, an Set was created to hold history of generated tiles configurations in order to prevent a situation in which the same tile configuration will be added to the queue and checked for correctness multiple times. Tile configurations are added to the history set just after their generation.
+
+\subsubsection{Depth-first search (DFS)}
+
+Depth-first search algorithm was implemented with a Stack class that represents a last-in-first-out (LIFO) strategy. As in BFS a root node is first added to the stack, then in each iteration a check for correctness is made. In DFS before generation of new tile configuration a condition of maximal depth of a branch is checked. If a given branch satisfies this condition child configurations are generated. Then if a given child configuration was not checked before (is not in a history set) and is not already present in the stack, it is added to it. This time, tile configuration is added to the history set only after is was popped from the stack, and not immediately after generation.  
+
+\subsubsection{Iterative deepening depth-first search (IDDFS)}
+
+IDDFS was implemented similarly to the DFS algorithm. Roughly speaking it calls the same actions as DFS but in an iterative manner. In each iteration an algorithm goes to the certain depth starting from 1, which is then incremented if correct solution was not found. A new stack and a history set is created for each iteration. Then all steps are analogous to the DFS algorithm. The procedure is continued until a correct configuration is found or a condition of a maximal depth is reached.
+
+ \subsubsection{Best-first search (BFS)}
+
+Best-first search algorithm is the first algorithm that uses heuristics to find the correct configuration. From implementation perspective it is largely similar to Breadth-first search algorithm, however, instead of using FIFO queue, a priority queue is used. Priority of an element is calculated based on heuristics used.
+
+\subsubsection{A*}
+
+A* algorithm is in fact implemented as Best-first search algorithm but with different method of priority calculation. In A* not only the cost value g(n) is used but also a distance from the root is taken into account. Everything else is just like in Best-First search algorithm.
+
+
+\subsubsection{Simplified Memory Bounded A* (SMA*)}
+
+SMA* is the most complicated algorithm from all described ones. First of all it used two types of priority queues. Priority is defined exactly as in A* algorithm, however, it gets updated throughout the algorithm progress. First queue named open is ordered with this priority and it holds all of the elements that are to be processed. Second queue is named closed, and it is ordered with a reversed way, meaning elements with lowest priority will be served first. This queue is used to find which elements should be forgotten when a memory limit is reached. Next two structures used are aimed to hold successors of a given board. They were implemented with use of a Map collections in which a tile configuration is a key and a list of possible children tile configurations are values. First map named availableSuccessorsMap holds all possible children configurations, which are those that can be generated from a given tile configuration excluding such configurations that were decided to be removed from memory. Next map, which is successorMap hold information about children configurations that are yet to be processed - if some branch would turn out to be unpromising algorithm gets a next child to process from the sucessorMap. Furthermore, a variable to hold current memory consumption is needed (named currentDepth). 
+
+As usual, the algorithm starts by putting the root node into the open queue, also currentDepth is incremented. Then until the open queue is empty a tile configuration with highest priority is popped from it and returned if correct. If not, a process of a successor generation takes place. Initially a check is made whether sucessorMap contains the current tile configuration. If so, the successor is simply the next element from a children list taken from sucessorMap. The successor is then removed from this list, so that the algorithm will later know that this child has already been processed. If the sucessorMap does not contain the current tile configuration it means that none of its children were processed. Then the successor is taken as the first child from the list of possible children configuration taken from availableSuccessorsMap. 
+The next part of the algorithm checks whether the successor was found. If so, an algorithms tests whether its configuration is correct and returns it if it is. If not, the procedure of defining value f(s) for the successor takes place. If the number of steps required to reach this configuration exceeds the memory limit f(s) is set to infinity - as this element should be marked as the first to be forgotten. If not f(n) is defined as:
+\[
+f(s) = max(f(n), g(s) + h(s).
+\]
+Then, such a successor is added to both queues, open and closed. 
+On the other hand, if no successor was found, meaning all available children were processed, a backup procedure takes place. With this procedure costs are propagated through the graph and as a result priorities in nodes are recalculated so that most promising branches are first taken into account. It sets the f(n) value to be the lowest f(s) from all of the available children. Backup procedure is called recursively for parent node of a current node until root node is reached. After whole procedure is finished, current node is removed from both queues and currentDepth is incremented. 
+Next part of the algorithm is called when memory limit is reached and it is aimed to forget the least promising node in order to make space for others. The node is chosen by polling from the closed queue. It is also removed from an open queue. Then the availableSuccessorsMap is updated so that it no longer includes the forgotten node. Then a parent node is added to both queues. If the parent node has no successors to be processed its f(n) is set to infinity, so that it will be first to be forgotten. The last step is decrementing of the currentDepth variable.  
+
+In this way SMA* was implemented and it finds a solution withing a given memory limit. 
+
+\section{Algorithms' analysis}
+
+For every method of puzzle solving unit tests were created that were aimed to check if a method is able to solve given test cases and in what time.
+
+\subsection {Test cases}
+
+When it comes to test cases, two types of puzzles were analyzed - 8 puzzle and 15 puzzle, both with different difficulty level. Tile configurations that were used as test cases are presented in figures below.
+
+\begin{figure}[h]
+    \includegraphics[scale=0.75]{eight_puzzle_test}
+    \centering
+    \caption{8-puzzle test cases}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[scale=0.75]{fifteen_puzzle_test}
+    \centering
+    \caption{15-puzzle test cases}
+\end{figure}
+
+For each of those test cases time of execution, length of the solution found, and a number of needed iterations was measured. All algorithms were tested with maximal depth of 100 and order of children generation:  RIGHT, DOWN, LEFT, UP.
+
+\subsection {Experiment results }
+
+In each of the test cases, both for 8-puzzle and 15-puzzle time of execution, number of needed iterations, and the length of the found solution was measured. Results for 8-puzzle are presented in a table below.
+
+
+\begin{longtable}{@{}|
+>{\columncolor[HTML]{C0C0C0}}c ccccccccc|@{}}
+\caption{8-puzzle test results}
+\label{eight-puzzle-test}\\
+\toprule
+Method & \cellcolor[HTML]{C0C0C0} & \cellcolor[HTML]{C0C0C0} & \cellcolor[HTML]{C0C0C0} & \multicolumn{2}{c}{\cellcolor[HTML]{C0C0C0}BestFS} & \multicolumn{2}{c}{\cellcolor[HTML]{C0C0C0}A*} & \multicolumn{2}{c|}{\cellcolor[HTML]{C0C0C0}SMA*} \\
+Heuristics & \multirow{-2}{*}{\cellcolor[HTML]{C0C0C0}BFS} & \multirow{-2}{*}{\cellcolor[HTML]{C0C0C0}DFS} & \multirow{-2}{*}{\cellcolor[HTML]{C0C0C0}IDFS} & \cellcolor[HTML]{C0C0C0}I.P. & \cellcolor[HTML]{C0C0C0}M.D & \cellcolor[HTML]{C0C0C0}I.P. & \cellcolor[HTML]{C0C0C0}M.D & \cellcolor[HTML]{C0C0C0}I.P. & \cellcolor[HTML]{C0C0C0}M.D \\* \midrule
+\endfirsthead
+%
+\endhead
+%
+\bottomrule
+\endfoot
+%
+\endlastfoot
+%
+\multicolumn{10}{|c|}{\cellcolor[HTML]{EFEFEF}TEST 1} \\* \midrule
+Length & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 & 2 \\
+Iterations & 6 & 30780 & 2 & 3 & 3 & 3 & 3 & 5 & 9 \\
+Time & 0.010 & 0.450 & 0.008 & 0.000 & 0.000 & 0.010 & 0.001 & 0.012 & 0.000 \\* \midrule
+\multicolumn{10}{|c|}{\cellcolor[HTML]{EFEFEF}TEST 2} \\* \midrule
+Length & 8 & 8 & 8 & 8 & 8 & 8 & 8 & 8 & 8 \\
+Iterations & 174 & 78216 & 8 & 11 & 30 & 12 & 26 & 35 & 68 \\
+Time & 0.023 & 0.831 & 0.010 & 0.022 & 0.025 & 0.009 & 0.010 & 0.009 & 0.013 \\* \midrule
+\multicolumn{10}{|c|}{\cellcolor[HTML]{EFEFEF}TEST 3} \\* \midrule
+Length & 5 & 5 & 5 & 5 & 5 & 5 & 7 & 5 & 5 \\
+Iterations & 36 & 31425 & 5 & 7 & 7 & 9 & 5 & 26 & 19 \\
+Time & 0.015 & 0.537 & 0.015 & 0.000 & 0.001 & 0.014 & 0.010 & 0.000 & 0.013 \\* \midrule
+\multicolumn{10}{|c|}{\cellcolor[HTML]{EFEFEF}TEST 4} \\* \midrule
+Length & 13 & 13 & 13 & 13 & 13 & 13 & 13 & 13 & 13 \\
+Iterations & 3224 & 16402 & 17 & 140 & 36 & 239 & 160 & 578 & 545 \\
+Time & 0.097 & 0.236 & 0.105 & 0.039 & 0.024 & 0.033 & 0.055 & 0.041 & 0.028 \\* \midrule
+\multicolumn{10}{|c|}{\cellcolor[HTML]{EFEFEF}TEST 5} \\* \midrule
+Length & 18 & 18 & 18 & 18 & 18 & 18 & 18 & 18 & 18 \\
+Iterations & 29565 & 136896 & 27 & 1041 & 403 & 1875 & 581 & 10279 & 1206 \\
+Time & 0.22 & 2.45 & 0.454 & 0.061 & 0.059 & 0.164 & 0.042 & 0.286 & 0.031 \\* \midrule
+\multicolumn{10}{|c|}{\cellcolor[HTML]{EFEFEF}TEST 6} \\* \midrule
+Length & 18 & 18 & 18 & 18 & 18 & 18 & 18 & 18 & 18 \\
+Iterations & 29565 & 136896 & 27 & 1041 & 403 & 1875 & 581 & 2766 & 1206 \\
+Time & 0.246 & 2.465 & 0.407 & 0.102 & 0.033 & 0.158 & 0.079 & 0.206 & 0.032 \\* \midrule
+\multicolumn{10}{|c|}{\cellcolor[HTML]{EFEFEF}TEST 7} \\* \midrule
+Length & 28 & 28 & 28 & 28 & 28 & 28 & 28 & 28 & 28 \\
+Iterations & 375188 & 74393 & 33 & 663 & 186 & 53917 & 8986 & 65245 & 6077 \\
+Time & 6.224 & 0.524 & 1.259 & 0.074 & 0.014 & 1.731 & 0.502 & 14.61 & 0.171 \\* \bottomrule
+\end{longtable}
 
 \newpage
 \listoffigures
