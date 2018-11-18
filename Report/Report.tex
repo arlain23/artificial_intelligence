@@ -8,6 +8,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{pgfplots}
 
 \graphicspath{ {./images/} }
 
@@ -144,6 +145,8 @@ The program can be started from the command line and takes the following paramet
     \item --help (printing help)
 \end{itemize}
 
+\subsubsection{Order and heuristics}
+
 BFS, DFS and IDDFS require the order in which successors of given state are processed to be passed. ``R'' indicates that the nodes can be chosen randomly, whereas a string ``R L U D'' means the following search order: right, left, up, down.
 
 Best-first search, A* and SMA* require an ID of a heuristic to be passed. The implemented ones are:
@@ -166,15 +169,21 @@ Manhattan distance heuristics answers with the sum of distances from each tile's
 
 where $d$ is the distance, $p$ and $q$ are the considered vectors and $(p_1, p_2)$, $(q_1, q_2)$ are their components.
 
+\subsubsection{Input}
+
 In the first line of standard input two integer values, R C are given: row count and column count, respectively, defining frame size. Subsequent R lines of standard input contain C space separated integer values describing a piece in the puzzle. Value 0 denotes the empty space in the given frame.
+
+\subsubsection{Viewer}
 
 Additionally, the second small program has been created, namely a ``viewer''. The viewer allows users to see what moves were performed to arrive at a solved board.
 
-\subsection{Output}
+\subsubsection{Output}
 
 When the first program finishes its work, it displays four lines of text. In the first line, a size of the puzzle is shown (rows $\times$ columns). The second line contains the initial order of tiles in the board. The third line contains the length of the sequence of moves leading to a correct solution, whereas the fourth line is filled with the aforementioned sequence of moves.
 
 The same information is also saved to a file which can be used by the viewer, where each consecutive permutation, i.e. the state of the board, is displayed every second.
+
+\section{Results of experiments and analysis of the algorithms}
 
 \newpage
 \listoffigures
