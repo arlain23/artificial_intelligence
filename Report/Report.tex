@@ -395,6 +395,16 @@ Next analysis of performance will be devoted to length of the solution found. Pl
 
 Once again A* algorithm was the one to always arrive with the shortest path to the solution. Until 4th test also SMA* was able to find a solution with the same length. In test 5 and 6, even tough it took an awful lot of time still the final result was close to optimal. Best First Search algorithm was the one to find solutions of longest paths.
 
+\section {Conclusions}
+
+In this project, six different algorithms were implemented, in order to solve an 8 and 15-puzzle problem. Three of those algorithms, namely BFS, DFS and IDDFS were uninformed algorithms, while BestFS, A* and SMA* were informed algorithms. For the latter group, two types of heuristics were implemented: Incorrect Position and Manhattan Distance. All algorithms were tested with 12 test cases, 6 per each puzzle type.
+
+All test were performed on local environment which was not closed, hence, some other processes of the operating system may have influenced the results. However, even with such a small number of test cases and limits of the test environment, the behaviour of algorithms could be observed. In general, informed algorithms  performed much better than uninformed algorithms, both when it comes to processing time and length of a solution. For difficult and large puzzles, SMA* took a lot more time than other informed algorithms, however, it arrived with an almost optimal solution. In many test cases, Best First Search required the least amount of time, however, the path found was sometimes much longer than the path found by other algorithms. On the other hand, A* in all test cases resulted in the shortest possible path that was found with the shortest  or close to the shortest execution time. DFS was the algorithm that performed very poorly, especially in 15-puzzle problem. BFS usually took more time, but it arrived at a solution in all test cases except the most complicated one. When it comes to the comparison of heuristics it is all dependent on the initial tile configuration. For some tests Incorrect Position Heuristics gave better results, while for the other Manhattan Distance. The importance of proper choice of heuristics was proved with use of test 0 heuristics, which was not able to solve even the simplest puzzles in time comparable to other algorithms. 
+
+Depending on whether the time of execution is more important, or finding the shortest path, either Best First Search or A* should be used to tackle the problem of puzzle solving. 
+
+
+
 \newpage
 \listoffigures
 \newpage
