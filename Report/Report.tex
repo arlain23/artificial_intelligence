@@ -135,7 +135,7 @@ Simplified Memory Bounded A* is the successor of MA* which takes the concept of 
 
 \subsection{Language}
 
-The project was written in Eclipse IDE using Java programming language with JDK 8. It was created with use of Apache Maven to handle dependencies between sub-projects and external libraries. 
+The project was written in Eclipse IDE using Java programming language with JDK 8. It was created with the use of Apache Maven to handle dependencies between sub-projects and external libraries.
 
 \subsection{Functional requirements}
 \subsubsection{Command line arguments}
@@ -192,47 +192,47 @@ Additionally, the second small program has been created, namely a ``viewer''. Th
 
 \subsubsection{Breadth-first search (BFS)}
 
-In the project BFS was implemented with use of a Queue collection that order elements in a FIFO (first-in-first-out) manner. Before the first iteration of the algorithm a root node of a graph is added to the queue. Then, for each element of the queue, a function checks whether the tile configuration is correct. If not, for a current element, children configurations are generated according to the given order of movement directions and added to the queue. Furthermore, an Set was created to hold history of generated tiles configurations in order to prevent a situation in which the same tile configuration will be added to the queue and checked for correctness multiple times. Tile configurations are added to the history set just after their generation.
+In the project, BFS was implemented with the use of a Queue collection that order elements in a FIFO (first-in-first-out) manner. Before the first iteration of the algorithm, a root node of a graph is added to the queue. Then, for each element of the queue, a function checks whether the tile configuration is correct. If not, for a current element, children configurations are generated according to the given order of movement directions and added to the queue. Furthermore, a Set was created to hold a history of generated tiles configurations in order to prevent a situation in which the same tile configuration will be added to the queue and checked for correctness multiple times. Tile configurations are added to the history set just after their generation.
 
 \subsubsection{Depth-first search (DFS)}
 
-Depth-first search algorithm was implemented with a Stack class that represents a last-in-first-out (LIFO) strategy. As in BFS a root node is first added to the stack, then in each iteration a check for correctness is made. In DFS before generation of new tile configuration a condition of maximal depth of a branch is checked. If a given branch satisfies this condition child configurations are generated. Then if a given child configuration was not checked before (is not in a history set) and is not already present in the stack, it is added to it. This time, tile configuration is added to the history set only after is was popped from the stack, and not immediately after generation.  
+Depth-first search algorithm was implemented with a Stack class that represents a last-in-first-out (LIFO) strategy. As in BFS, a root node is first added to the stack, then in each iteration, a check for correctness is made. In DFS before generation of new tile configuration, a condition of a maximal depth of a branch is checked. If a given branch satisfies this condition child configurations are generated. Then if a given child configuration was not checked before (is not in a history set) and is not already present in the stack, it is added to it. This time, tile configuration is added to the history set only after it was popped from the stack, and not immediately after generation.
 
 \subsubsection{Iterative deepening depth-first search (IDDFS)}
 
-IDDFS was implemented similarly to the DFS algorithm. Roughly speaking it calls the same actions as DFS but in an iterative manner. In each iteration an algorithm goes to the certain depth starting from 1, which is then incremented if correct solution was not found. A new stack and a history set is created for each iteration. Then all steps are analogous to the DFS algorithm. The procedure is continued until a correct configuration is found or a condition of a maximal depth is reached.
+IDDFS was implemented similarly to the DFS algorithm. Roughly speaking it calls the same actions as DFS but in an iterative manner. In each iteration, an algorithm goes to the certain depth starting from 1, which is then incremented if the correct solution was not found. A new stack and a history set are created for each iteration. Then all steps are analogous to the DFS algorithm. The procedure is continued until a correct configuration is found or a condition of a maximal depth is reached.
 
  \subsubsection{Best-first search (BFS)}
 
-Best-first search algorithm is the first algorithm that uses heuristics to find the correct configuration. From implementation perspective it is largely similar to Breadth-first search algorithm, however, instead of using FIFO queue, a priority queue is used. Priority of an element is calculated based on heuristics used.
+The best-first search algorithm is the first algorithm that uses heuristics to find the correct configuration. From the implementation perspective it is largely similar to Breadth-first search algorithm, however, instead of using a FIFO queue, a priority queue is used. Priority of an element is calculated based on heuristics used.
 
 \subsubsection{A*}
 
-A* algorithm is in fact implemented as Best-first search algorithm but with different method of priority calculation. In A* not only the cost value g(n) is used but also a distance from the root is taken into account. Everything else is just like in Best-First search algorithm.
+A* algorithm is in fact implemented as Best-first search algorithm but with a different method of priority calculation. In A* not only the cost value g(n) is used but also a distance from the root is taken into account. Everything else is just like in Best-First search algorithm.
 
 
 \subsubsection{Simplified Memory Bounded A* (SMA*)}
 
-SMA* is the most complicated algorithm from all described ones. First of all it used two types of priority queues. Priority is defined exactly as in A* algorithm, however, it gets updated throughout the algorithm progress. First queue named open is ordered with this priority and it holds all of the elements that are to be processed. Second queue is named closed, and it is ordered with a reversed way, meaning elements with lowest priority will be served first. This queue is used to find which elements should be forgotten when a memory limit is reached. Next two structures used are aimed to hold successors of a given board. They were implemented with use of a Map collections in which a tile configuration is a key and a list of possible children tile configurations are values. First map named availableSuccessorsMap holds all possible children configurations, which are those that can be generated from a given tile configuration excluding such configurations that were decided to be removed from memory. Next map, which is successorMap hold information about children configurations that are yet to be processed - if some branch would turn out to be unpromising algorithm gets a next child to process from the sucessorMap. Furthermore, a variable to hold current memory consumption is needed (named currentDepth). 
+SMA* is the most complicated algorithm from all described ones. First of all, it used two types of priority queues. Priority is defined exactly as in A* algorithm, however, it gets updated throughout the algorithm progress. The first queue named open is ordered with this priority and it holds all of the elements that are to be processed. The second queue is named closed, and it is ordered with a reversed way, meaning elements with the lowest priority will be served first. This queue is used to find which elements should be forgotten when a memory limit is reached. Next two structures used are aimed to hold successors of a given board. They were implemented with the use of a Map collection in which a tile configuration is a key and a list of possible children tile configurations are values. The first map named availableSuccessorsMap holds all possible children configurations, which are those that can be generated from a given tile configuration excluding such configurations that were decided to be removed from memory. Next map, which is successorMap hold information about children configurations that are yet to be processed - if some branch would turn out to be unpromising algorithm gets a next child to process from the sucessorMap. Furthermore, a variable to hold current memory consumption is needed (named currentDepth).
 
-As usual, the algorithm starts by putting the root node into the open queue, also currentDepth is incremented. Then until the open queue is empty a tile configuration with highest priority is popped from it and returned if correct. If not, a process of a successor generation takes place. Initially a check is made whether sucessorMap contains the current tile configuration. If so, the successor is simply the next element from a children list taken from sucessorMap. The successor is then removed from this list, so that the algorithm will later know that this child has already been processed. If the sucessorMap does not contain the current tile configuration it means that none of its children were processed. Then the successor is taken as the first child from the list of possible children configuration taken from availableSuccessorsMap. 
-The next part of the algorithm checks whether the successor was found. If so, an algorithms tests whether its configuration is correct and returns it if it is. If not, the procedure of defining value f(s) for the successor takes place. If the number of steps required to reach this configuration exceeds the memory limit f(s) is set to infinity - as this element should be marked as the first to be forgotten. If not f(n) is defined as:
+As usual, the algorithm starts by putting the root node into the open queue, also currentDepth is incremented. Then until the open queue is empty a tile configuration with the highest priority is popped from it and returned if correct. If not, a process of a successor generation takes place. Initially, a check is made whether sucessorMap contains the current tile configuration. If so, the successor is simply the next element from a children list taken from sucessorMap. The successor is then removed from this list so that the algorithm will later know that this child has already been processed. If the sucessorMap does not contain the current tile configuration it means that none of its children was processed. Then the successor is taken as the first child from the list of possible children configuration taken from availableSuccessorsMap.
+The next part of the algorithm checks whether the successor was found. If so, an algorithm tests whether its configuration is correct and returns it if it is. If not, the procedure of defining value f(s) for the successor takes place. If the number of steps required to reach this configuration exceeds the memory limit f(s) is set to infinity - as this element should be marked as the first to be forgotten. If not f(n) is defined as:
 \[
 f(s) = max(f(n), g(s) + h(s).
 \]
-Then, such a successor is added to both queues, open and closed. 
-On the other hand, if no successor was found, meaning all available children were processed, a backup procedure takes place. With this procedure costs are propagated through the graph and as a result priorities in nodes are recalculated so that most promising branches are first taken into account. It sets the f(n) value to be the lowest f(s) from all of the available children. Backup procedure is called recursively for parent node of a current node until root node is reached. After whole procedure is finished, current node is removed from both queues and currentDepth is incremented. 
-Next part of the algorithm is called when memory limit is reached and it is aimed to forget the least promising node in order to make space for others. The node is chosen by polling from the closed queue. It is also removed from an open queue. Then the availableSuccessorsMap is updated so that it no longer includes the forgotten node. Then a parent node is added to both queues. If the parent node has no successors to be processed its f(n) is set to infinity, so that it will be first to be forgotten. The last step is decrementing of the currentDepth variable.  
+Then, such a successor is added to both queues, open and closed.
+On the other hand, if no successor was found, meaning all available children were processed, a backup procedure takes place. With this procedure costs are propagated through the graph and as a result priorities in nodes are recalculated so that most promising branches are first taken into account. It sets the f(n) value to be the lowest f(s) from all of the available children. The backup procedure is called recursively for the parent node of a current node until the root node is reached. After the whole procedure is finished, the current node is removed from both queues and currentDepth is incremented.
+Next part of the algorithm is called when the memory limit is reached and it is aimed to forget the least promising node in order to make space for others. The node is chosen by polling from the closed queue. It is also removed from an open queue. Then the availableSuccessorsMap is updated so that it no longer includes the forgotten node. Then a parent node is added to both queues. If the parent node has no successors to be processed its f(n) is set to infinity so that it will be first to be forgotten. The last step is decrementing of the currentDepth variable.
 
-In this way SMA* was implemented and it finds a solution withing a given memory limit. 
+In this way, SMA* was implemented and it finds a solution within a given memory limit.
 
 \section{Algorithms' analysis}
 
-For every method of puzzle solving unit tests were created that were aimed to check if a method is able to solve given test cases and in what time.
+For every method of puzzle solving, unit tests were created that were aimed to check if a method is able to solve given test cases and in what time.
 
 \subsection {Test cases}
 
-When it comes to test cases, two types of puzzles were analyzed - 8 puzzle and 15 puzzle, both with different difficulty level. Tile configurations that were used as test cases are presented in figure~\ref{puzzle-test}.
+When it comes to test cases, two types of puzzles were analyzed - 8-puzzle and 15-puzzle, both with a different difficulty level. Tile configurations that were used as test cases are presented in figure~\ref{puzzle-test}.
 
 \begin{figure}[h]
     \includegraphics[width=\textwidth]{puzzle_test}
@@ -241,15 +241,15 @@ When it comes to test cases, two types of puzzles were analyzed - 8 puzzle and 1
     \label {puzzle-test}
 \end{figure}
 
-Each test case is presented in a form of a tile grid. Blue grids represent 8-puzzle problems, while green ones - 15 puzzle problem. Each of those grids contains NxN elements, where N is either 3 or 4 for 8-puzzle and 15-puzzle respectively. Tile 0 acts as an empty tile which will be able to preform movements. 
+Each test case is presented in a form of a tile grid. Blue grids represent 8-puzzle problems, while green ones - 15 puzzle problem. Each of those grids contains NxN elements, where N is either 3 or 4 for 8-puzzle and 15-puzzle respectively. Tile 0 acts as an empty tile which will be able to perform movements.
 
-Each test case was fetched to JUnit tests of all algorithms. Then, for each of those test cases time of execution, length of the solution found, and a number of needed iterations was measured. All algorithms were tested with maximal depth of 100 and order of children generation:  RIGHT, DOWN, LEFT, UP. Results of those tests forms a bases for further algorithm comparison.
+Each test case was fetched to JUnit tests of all algorithms. Then, for each of those test cases time of execution, length of the solution found, and a number of needed iterations was measured. All algorithms were tested with a maximal depth of 100 and order of children generation:  RIGHT, DOWN, LEFT, UP. Results of those tests form a base for further algorithm comparison.
 
 \subsection {Experiment results }
 
 \subsubsection {8-puzzle}
 
-In each of the test cases, both for 8-puzzle and 15-puzzle time of execution, number of needed iterations, and the length of the found solution was measured. Results for 8-puzzle are presented in the table~\ref{eight-puzzle-table}. I.P. and M.D. means Incorrect Position and Manhattan Distance Heuristics respectively. In the table results for test 0 heuristics is not shown, as it was not able to properly solve puzzles either due to its poor performance. In most cases Java Heap Space Exception was thrown for this heuristics.  
+In each of the test cases, both for 8-puzzle and 15-puzzle time of execution, a number of needed iterations, and the length of the found solution was measured. Results for 8-puzzle are presented in the table~\ref{eight-puzzle-table}. I.P. and M.D. mean Incorrect Position and Manhattan Distance Heuristics respectively. In the table results for test 0 heuristics is not shown, as it was not able to properly solve puzzles either due to its poor performance. In most cases, Java Heap Space Exception was thrown for this heuristics.
 
 
 \begin{longtable}[h]{|
@@ -294,7 +294,7 @@ Iterations & 375188 & 74393 & 33 & 663 & 186 & 53917 & 8986 & 65245 & 6077 \\
 Time & 6.224 & 0.524 & 1.259 & 0.074 & 0.014 & 1.731 & 0.502 & 14.61 & 0.171 \\ \hline
 \end{longtable}
 
-The simplest way to compare those algorithms is to check how much time was required to find the solution. Of course the time measurements are only approximations of the real time that was needed as we are not able to provide fully closed testing environment which will not affect algorithm's performance. However, for a simple task of rough comparison of the algorithms on just a few examples such measurements will suffice.
+The simplest way to compare those algorithms is to check how much time was required to find the solution. Of course, the time measurements are only approximations of the real time that was needed as we are not able to provide a fully closed testing environment which will not affect algorithm's performance. However, for a simple task of rough comparison of the algorithms on just a few examples, such measurements will suffice.
 
 Figure ~\ref{eight-puzzle-plot} presents how much time each algorithm needed to solve each test puzzle in a form of a graph.
 
@@ -305,7 +305,7 @@ Figure ~\ref{eight-puzzle-plot} presents how much time each algorithm needed to 
 \label {eight-puzzle-plot}
 \end{figure}
 
-From this figure it is clear that in all tests except from 7th,  DFS algorithm was the slowest. In the last test BFS was the worst choice and it did not perform much better on other tests. Due to large differences in time measurements for BFS/DFS and other algorithms it is hard to find the best algorithm based on the plot provided. That is why the second plot in figure~\ref{eight-puzzle-plot-limited} was created which does not include BFS and DFS results. From this plot it is clear that the best algorithm cannot be stated, as it all depends on the type difficulty and configuration of a puzzle to be solved. Though in most cases IDDFS turned out to have the poorest performance. Surprisingly for last test A* with Incorrect Position heuristics turned out to be much worse than other algorithms. Depending on the test either Best First Search, A* or SMA* gave the best results. It can be stated that informed strategies performed much better than uninformed ones for the presented test cases.
+From this figure, it is clear that in all tests except for the 7th,  DFS algorithm was the slowest. In the last test, BFS was the worst choice and it did not perform much better on other tests. Due to large differences in time measurements for BFS/DFS and other algorithms, it is hard to find the best algorithm based on the plot provided. That is why the second plot in figure~\ref{eight-puzzle-plot-limited} was created which does not include BFS and DFS results. From this plot, it is clear that the best algorithm cannot be stated, as it all depends on the type difficulty and configuration of a puzzle to be solved. Though in most cases IDDFS turned out to have the poorest performance. Surprisingly for the last test, A* with Incorrect Position heuristics turned out to be much worse than other algorithms. Depending on the test either Best First Search, A* or SMA* gave the best results. It can be stated that informed strategies performed much better than uninformed ones for the presented test cases.
 
  \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{8_puzzle_plot_limited}
@@ -314,7 +314,7 @@ From this figure it is clear that in all tests except from 7th,  DFS algorithm w
 \label {eight-puzzle-plot-limited}
 \end{figure}
 
-Furthermore, a length of the solution is also a good predeterminant of an ability of a method to find optimal solutions. Figure ~\ref{eight-puzzle-plot-length} depicts what was the solution length for each test case.
+Furthermore, a length of the solution is also a good predeterminant of the ability of a method to find optimal solutions. Figure ~\ref{eight-puzzle-plot-length} depicts what was the solution length for each test case.
 
  \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{8_puzzle_length}
@@ -323,12 +323,12 @@ Furthermore, a length of the solution is also a good predeterminant of an abilit
 \label {eight-puzzle-plot-length}
 \end{figure}
 
-Due to the nature of DFS it always finds the solution that is has the largest length from all algorithms roughly equal to the depth limit of 100. For simple test cases, like test case 1, 2 and 3 there is almost no difference in solution length of all other algorithms. Only when test configuration are more complicated, differences in solution length start to be noticeable. For those test cases Best First Search with Incorrect Position Heuristics gave the worst results. Next there was Best First Search with Manhattan distance. Hence, we can judge that though being able to find the solution quickly, Best First Search algorithm does not find the most optimal solution. In all test cases, A* with both Incorrect Position heuristics and Manhattan Distance heuristics arrived with a solution of shortest path. Also SMA* with Manhattan Distance gave the same length of solution, while SMA* with the second type of heuristics required slightly more steps to achieve correct configuration. 
+Due to the nature of DFS, it always finds the solution that is has the largest length from all algorithms roughly equal to the depth limit of 100. For simple test cases, like test case 1, 2 and 3 there is almost no difference in solution length of all other algorithms. Only when test configuration is more complicated, differences in solution length start to be noticeable. For those test cases, Best First Search with Incorrect Position Heuristics gave the worst results. Next, there was Best First Search with Manhattan distance. Hence, we can judge that though being able to find the solution quickly, Best First Search algorithm does not find the most optimal solution. In all test cases, A* with both Incorrect Position heuristics and Manhattan Distance heuristics arrived with a solution of the shortest path. Also, SMA* with Manhattan Distance gave the same length of the solution, while SMA* with the second type of heuristics required slightly more steps to achieve correct configuration.
 
 \newpage
 \subsubsection {15-puzzle}
 
-Similarly, for the 15-puzzle problem tile configurations from test cases were tested and their results gathered in the form of a table. This time, however, not only all algorithms with test 0 Heuristics were unable to solve the puzzle in acceptable time but also a DFS algorithm. That is why they will not be presented in a table of results~\ref{fifteen-puzzle-table}. 
+Similarly, for the 15-puzzle problem tile configurations from test cases were tested and their results gathered in the form of a table. This time, however, not only all algorithms with test 0 Heuristics were unable to solve the puzzle in an acceptable time but also a DFS algorithm. That is why they will not be presented in a table of results~\ref{fifteen-puzzle-table}.
 
 
 \begin{longtable}[h]{|
@@ -372,8 +372,8 @@ Length & - & - & 78 & 138 & 24 & 24 & 28 & 30 \\
 Iterations & - & - & 913 & 16286 & 33782 & 4467 & 110953 & 76123 \\
 Time & - & - & 0.049 & 1.096 & 2.343 & 0.329 & 178.558 & 68.247 \\ \hline
 \end{longtable}
- 
-As in case of 8-puzzle, for 15-puzzle a plot of time needed for all algorithms to complete is presented in figure ~\ref{fifteen-puzzle-plot}.
+
+As in the case of 8-puzzle, for 15-puzzle a plot of time needed for all algorithms to complete is presented in figure ~\ref{fifteen-puzzle-plot}.
 
 \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{15_puzzle_plot}
@@ -382,9 +382,9 @@ As in case of 8-puzzle, for 15-puzzle a plot of time needed for all algorithms t
 \label {fifteen-puzzle-plot}
 \end{figure}
 
-In this plot largest numbers were omitted, as they exceed largely the average time spend on each test. For the last test the worst method which is SMA* with Incorrect Position Heuristics was over 3500 times slower than the best method - Best First Search with Incorrect Position Heuristics. Not to mention that BFS, and IDDFS took to long to even measure their efficiency. Once again, depending on the test sample, either Best First Search, A* or SMA* gave the best results and in the first test samples they were quite similar. Only after 4th sample SMA* drastically deteriorated in performance.    
+In this plot largest numbers were omitted, as they exceed largely the average time spent on each test. For the last test, the worst method which is SMA* with Incorrect Position Heuristics was over 3500 times slower than the best method - Best First Search with Incorrect Position Heuristics. Not to mention that BFS and IDDFS took to long to even measure their efficiency. Once again, depending on the test sample, either Best First Search, A* or SMA* gave the best results and in the first test samples, they were quite similar. Only after 4th sample SMA* drastically deteriorated in performance.
 
-Next analysis of performance will be devoted to length of the solution found. Plot representing it is shown if figure  ~\ref{fifteen-puzzle-plot-length}.
+Next analysis of performance will be devoted to the length of the solution found. Plot representing it is shown if figure  ~\ref{fifteen-puzzle-plot-length}.
 
  \begin{figure}[h]
     \includegraphics[width=0.75\textwidth]{15_puzzle_length}
@@ -393,15 +393,15 @@ Next analysis of performance will be devoted to length of the solution found. Pl
 \label {fifteen-puzzle-plot-length}
 \end{figure}
 
-Once again A* algorithm was the one to always arrive with the shortest path to the solution. Until 4th test also SMA* was able to find a solution with the same length. In test 5 and 6, even tough it took an awful lot of time still the final result was close to optimal. Best First Search algorithm was the one to find solutions of longest paths.
+Once again A* algorithm was the one to always arrive with the shortest path to the solution. Until 4th test also SMA* was able to find a solution with the same length. In test 5 and 6, even though it took an awful lot of time still the final result was close to optimal. Best First Search algorithm was the one to find solutions of longest paths.
 
 \section {Conclusions}
 
 In this project, six different algorithms were implemented, in order to solve an 8 and 15-puzzle problem. Three of those algorithms, namely BFS, DFS and IDDFS were uninformed algorithms, while BestFS, A* and SMA* were informed algorithms. For the latter group, two types of heuristics were implemented: Incorrect Position and Manhattan Distance. All algorithms were tested with 12 test cases, 6 per each puzzle type.
 
-All test were performed on local environment which was not closed, hence, some other processes of the operating system may have influenced the results. However, even with such a small number of test cases and limits of the test environment, the behaviour of algorithms could be observed. In general, informed algorithms  performed much better than uninformed algorithms, both when it comes to processing time and length of a solution. For difficult and large puzzles, SMA* took a lot more time than other informed algorithms, however, it arrived with an almost optimal solution. In many test cases, Best First Search required the least amount of time, however, the path found was sometimes much longer than the path found by other algorithms. On the other hand, A* in all test cases resulted in the shortest possible path that was found with the shortest  or close to the shortest execution time. DFS was the algorithm that performed very poorly, especially in 15-puzzle problem. BFS usually took more time, but it arrived at a solution in all test cases except the most complicated one. When it comes to the comparison of heuristics it is all dependent on the initial tile configuration. For some tests Incorrect Position Heuristics gave better results, while for the other Manhattan Distance. The importance of proper choice of heuristics was proved with use of test 0 heuristics, which was not able to solve even the simplest puzzles in time comparable to other algorithms. 
+All test were performed on a local environment which was not closed, hence, some other processes of the operating system may have influenced the results. However, even with such a small number of test cases and limits of the test environment, the behaviour of algorithms could be observed. In general, informed algorithms performed much better than uninformed algorithms, both when it comes to processing time and length of a solution. For difficult and large puzzles, SMA* took a lot more time than other informed algorithms, however, it arrived with an almost optimal solution. In many test cases, Best First Search required the least amount of time, however, the path found was sometimes much longer than the path found by other algorithms. On the other hand, A* in all test cases resulted in the shortest possible path that was found with the shortest or close to the shortest execution time. DFS was the algorithm that performed very poorly, especially in the 15-puzzle problem. BFS usually took more time, but it arrived at a solution in all test cases except the most complicated one. When it comes to the comparison of heuristics it is all dependent on the initial tile configuration. For some tests, Incorrect Position Heuristics gave better results, while for the other Manhattan Distance. The importance of proper choice of heuristics was proved with the use of test 0 heuristics, which was not able to solve even the simplest puzzles in a time comparable to other algorithms.
 
-Depending on whether the time of execution is more important, or finding the shortest path, either Best First Search or A* should be used to tackle the problem of puzzle solving. 
+Depending on whether the time of execution is more important, or finding the shortest path, either Best First Search or A* should be used to tackle the problem of puzzle solving.
 
 
 
