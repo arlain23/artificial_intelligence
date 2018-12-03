@@ -38,6 +38,7 @@ public class App
 {
     public static void main( String[] args ) throws UnsupportedArgumentsException, UnsupportedHeuristicsException,
     UnsupportedOrderException, UnsupportedInputException, UnsupportedPuzzleTypeException {
+    	
     	Solver solverType;
     	List<Direction> directionOrder;
     	Heuristics heuristics = TestZeroHeuristics.getInstance();

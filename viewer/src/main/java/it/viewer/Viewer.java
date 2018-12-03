@@ -13,19 +13,20 @@ public class Viewer {
 		List<Board> allBoards = new ArrayList<>();
 		allBoards.add(initBoard);
 		
+		System.out.println(initBoard);
+		System.out.println();
+		
+		
 		Board currentBoard = initBoard;
 		for (Direction direction : directionSteps) {
+			System.out.println(direction);
 			currentBoard = BoardHelper.moveNode(direction, currentBoard);
-			allBoards.add(currentBoard);
-		}
-		
-		
-		for (Board board : allBoards) {
-			System.out.println(board);
+			System.out.println(currentBoard);
 			System.out.println();
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 		

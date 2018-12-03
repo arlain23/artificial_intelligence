@@ -1,8 +1,11 @@
 package common.puzzle;
 
+import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.checkerframework.checker.formatter.qual.ConversionCategory;
 
 import common.Constants;
 import common.Constants.Direction;
@@ -21,8 +24,6 @@ public class Board implements Cloneable{
 	
 	private List<Direction> sequenceOfSteps = new ArrayList<>();
 	
-	private Board parentBoard;
-	
 	private int f_x = 0;
 	private int forgotten_f_x = 0;
 	
@@ -33,6 +34,8 @@ public class Board implements Cloneable{
 		
 		this.correctBoardBeginningZero = correctBoardBeginningZero;
 		this.correctBoardEndingZero = correctBoardEndingZero;
+		
+		
 	}
 	
 	public Board(PuzzleType puzzleType, List<Integer> numbers) {
@@ -149,11 +152,8 @@ public class Board implements Cloneable{
 	
 	
 	public Board getParentBoard() {
-		return parentBoard;
-	}
-
-	public void setParentBoard(Board parentBoard) {
-		this.parentBoard = parentBoard;
+		Direction oppositeDirection = Constants.REVERSE_DIRECTION.get(getLastStep());
+		return BoardHelper.moveNode(oppositeDirection, this);
 	}
 
 	public Board getCorrectBoardBeginningZero() {

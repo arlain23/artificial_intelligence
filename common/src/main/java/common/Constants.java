@@ -37,6 +37,6 @@ public class Constants {
 	public static Board correctBoardEndingZero8Puzzle = new Board(PuzzleType.eight, Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8,0}));
 	
 	public static Board correctBoardBeginningZero15Puzzle = new Board(PuzzleType.fifteen, Arrays.asList(new Integer[] {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}));;
-	public static Board correctBoardEndingZero15Puzzle = new Board(PuzzleType.fifteen, Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0}));;
+	public static Board correctBoardEndingZero15Puzzle = new Board(PuzzleType.fifteen, Arrays.asList(new Integer[] {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0}));
 	
 }
