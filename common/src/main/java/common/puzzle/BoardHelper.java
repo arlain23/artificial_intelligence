@@ -56,10 +56,9 @@ public class BoardHelper {
 			availableDirectionsSet.add(Direction.DOWN);
 		}
 		
-		List<Direction> sequenceOfSteps = board.getSequenceOfSteps();
-		if (sequenceOfSteps.size() > 0) {
-			Direction lastDirection = sequenceOfSteps.get(sequenceOfSteps.size() - 1);
-			availableDirectionsSet.remove(Constants.REVERSE_DIRECTION.get(lastDirection));
+		Direction lastStep = board.getLastStep();
+		if (lastStep != null) {
+			availableDirectionsSet.remove(lastStep);
 		}
 		
 		List<Direction> availableDirections = new ArrayList<>();
@@ -84,7 +83,9 @@ public class BoardHelper {
 		Board newBoard = null;
 		try {
 			newBoard = (Board) board.clone();
-			newBoard.addDirection(direction);
+			newBoard.setLastDirection(direction);
+			newBoard.setParentBoard(board);
+			
 			int x = newBoard.getEmptyNode().getX();
 			int y = newBoard.getEmptyNode().getY();
 			if (direction.equals(Direction.LEFT)) {
@@ -126,10 +127,37 @@ public class BoardHelper {
 		emptyNode.setY(newY);
 	}
 	
+	
+	public static List<Direction> getSequenceOfSteps(Board board) {
+		Board parentBoard = board;
+		
+		List<Direction> steps = new ArrayList<Direction> ();
+		steps.add(board.getLastStep());
+		while (true) {
+			parentBoard = parentBoard.getParentBoard();
+			if (parentBoard == null) {
+				break;
+			} 
+			Direction lastStep = parentBoard.getLastStep();
+			if (lastStep != null) {
+				steps.add(lastStep);
+			}
+		}
+		
+		
+		Collections.reverse(steps);
+		
+		return steps;
+		
+		
+	}
 	public static void printSequence(Board initBoard, Board board ) {
 		System.out.println("/");
 		System.out.println(initBoard);
-		List<Direction> steps = board.getSequenceOfSteps();
+		Board parentBoard = board;
+		
+		List<Direction> steps = getSequenceOfSteps(parentBoard);
+		
 		Board currentBoard = initBoard;
 		for (Direction step : steps) {
 			System.out.println(step);

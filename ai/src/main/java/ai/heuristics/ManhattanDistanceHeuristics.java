@@ -51,7 +51,7 @@ public class ManhattanDistanceHeuristics implements Heuristics{
 	
 	@Override
 	public int getHeuristicsValueAStar(Board board) {
-		return getHeuristicsValueBFS(board) + board.getSequenceOfSteps().size();
+		return getHeuristicsValueBFS(board) + board.getSequenceOfStepsSize();
 	}
 	
 	private static int getManhattanDistance(Node node1, Node node2) {

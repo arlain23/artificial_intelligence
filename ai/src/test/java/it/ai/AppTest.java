@@ -222,33 +222,15 @@ public class AppTest
 ////    		
 ////    	}
 ////    }
-    public void testAStarHeuristicsIncorrectPosition() {
-    	int iterator = 0;
-    	for (TestSolution testSolution : TEST_BOARDS) {
-    		System.out.println("TEST A* incorrect" + (++iterator));
-    		Board board = testSolution.getBoard();
-    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
-    		AStar aStar = new AStar(board, Constants.DIRECTION_ORDER);
-    		try {
-				Board solvedBoard = aStar.solve(IncorrectPositionHeuristics.getInstance());
-				testSingleBoard(solvedBoard, sequenceOfSteps);
-			} catch (NotSolvableException e) {
-				fail();
-			}
-    		
-    	}
-    	checkMemory();
-    }
-//    
-//    public void testAStarHeuristicsManhattanDistance() {
+//    public void testAStarHeuristicsIncorrectPosition() {
 //    	int iterator = 0;
 //    	for (TestSolution testSolution : TEST_BOARDS) {
-//    		System.out.println("TEST A* manh" + (++iterator));
+//    		System.out.println("TEST A* incorrect" + (++iterator));
 //    		Board board = testSolution.getBoard();
 //    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
 //    		AStar aStar = new AStar(board, Constants.DIRECTION_ORDER);
 //    		try {
-//				Board solvedBoard = aStar.solve(ManhattanDistanceHeuristics.getInstance());
+//				Board solvedBoard = aStar.solve(IncorrectPositionHeuristics.getInstance());
 //				testSingleBoard(solvedBoard, sequenceOfSteps);
 //			} catch (NotSolvableException e) {
 //				fail();
@@ -258,23 +240,41 @@ public class AppTest
 //    	checkMemory();
 //    }
 //    
-////    public void testSMAStarHeuristicsZero() {
-////    	int iterator = 0;
-////    	for (TestSolution testSolution : TEST_BOARDS) {
-////    		System.out.println("TEST SMA* 0" + (++iterator));
-////    		Board board = testSolution.getBoard();
-////    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
-////    		SMAStar smaStar = new SMAStar(board, Constants.DIRECTION_ORDER);
-////    		try {
-////				Board solvedBoard = smaStar.solve(TestZeroHeuristics.getInstance());
-////				testSingleBoard(solvedBoard, sequenceOfSteps);
-////			} catch (NotSolvableException e) {
-////				System.out.println(e.getLocalizedMessage());
-////				fail();
-////			}
-////    		
-////    	}
-////    }
+    public void testAStarHeuristicsManhattanDistance() {
+    	int iterator = 0;
+    	for (TestSolution testSolution : TEST_BOARDS) {
+    		System.out.println("TEST A* manh" + (++iterator));
+    		Board board = testSolution.getBoard();
+    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+    		AStar aStar = new AStar(board, Constants.DIRECTION_ORDER);
+    		try {
+				Board solvedBoard = aStar.solve(ManhattanDistanceHeuristics.getInstance());
+				testSingleBoard(solvedBoard, sequenceOfSteps);
+			} catch (NotSolvableException e) {
+				fail();
+			}
+    		
+    	}
+    	checkMemory();
+    }
+    
+//    public void testSMAStarHeuristicsZero() {
+//    	int iterator = 0;
+//    	for (TestSolution testSolution : TEST_BOARDS) {
+//    		System.out.println("TEST SMA* 0" + (++iterator));
+//    		Board board = testSolution.getBoard();
+//    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+//    		SMAStar smaStar = new SMAStar(board, Constants.DIRECTION_ORDER);
+//    		try {
+//				Board solvedBoard = smaStar.solve(TestZeroHeuristics.getInstance());
+//				testSingleBoard(solvedBoard, sequenceOfSteps);
+//			} catch (NotSolvableException e) {
+//				System.out.println(e.getLocalizedMessage());
+//				fail();
+//			}
+//    		
+//    	}
+//    }
 //    
 //    public void testSMAStarHeuristicsIncorrectPosition() {
 //    	int iterator = 0;
@@ -295,29 +295,29 @@ public class AppTest
 //    	checkMemory();
 //    }
 //    
-//    public void testSMAStarHeuristicsManhattanDistance() {
-//    	int iterator = 0;
-//    	for (TestSolution testSolution : TEST_BOARDS) {
-//    		System.out.println("TEST SMA* manh" + (++iterator));
-//    		Board board = testSolution.getBoard();
-//    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
-//    		SMAStar smaStar = new SMAStar(board, Constants.DIRECTION_ORDER);
-//    		try {
-//				Board solvedBoard = smaStar.solve(ManhattanDistanceHeuristics.getInstance());
-//				testSingleBoard(solvedBoard, sequenceOfSteps);
-//			} catch (NotSolvableException e) {
-//				System.out.println(e.getLocalizedMessage());
-//				fail();
-//			}
-//    		
-//    	}
-//    	checkMemory();
-//    }
+    public void testSMAStarHeuristicsManhattanDistance() {
+    	int iterator = 0;
+    	for (TestSolution testSolution : TEST_BOARDS) {
+    		System.out.println("TEST SMA* manh" + (++iterator));
+    		Board board = testSolution.getBoard();
+    		List<Direction> sequenceOfSteps = testSolution.getSequenceOfSteps();
+    		SMAStar smaStar = new SMAStar(board, Constants.DIRECTION_ORDER);
+    		try {
+				Board solvedBoard = smaStar.solve(ManhattanDistanceHeuristics.getInstance());
+				testSingleBoard(solvedBoard, sequenceOfSteps);
+			} catch (NotSolvableException e) {
+				System.out.println(e.getLocalizedMessage());
+				fail();
+			}
+    		
+    	}
+    	checkMemory();
+    }
     
     private void testSingleBoard(Board board, List<Direction> sequenceOfSteps) {
-    	System.out.println("LENGTH sol: " + board.getSequenceOfSteps().size());
+    	System.out.println("LENGTH sol: " + board.getSequenceOfStepsSize());
     	boolean isSolved = BoardHelper.isArrangementCorrect(board);
-    	boolean areSequencesEqual = areSequencesEqual(sequenceOfSteps, board.getSequenceOfSteps());
+    	boolean areSequencesEqual = areSequencesEqual(sequenceOfSteps, BoardHelper.getSequenceOfSteps(board));
 //    	System.out.println("SEQUENCES EQUAL " + areSequencesEqual);
     	assertTrue(isSolved);
     }

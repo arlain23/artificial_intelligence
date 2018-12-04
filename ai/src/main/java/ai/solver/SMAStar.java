@@ -38,11 +38,8 @@ public class SMAStar implements PuzzleSolver{
 		int memoryLimit = Constants.MAX_DEPTH;
 		
 		open.add(this.initBoard);
-		int currentDepth = 1;
-
 		
 		Map<Board, List<Board>> availableSuccessorsMap = new HashMap<Board, List<Board>> ();
-//		availableSuccessorsMap.put(this.initBoard, BoardHelper.getChildren(initBoard, directionOrder));
 		
 		Map<Board, List<Board>> successorMap = new HashMap<Board, List<Board>> ();
 		int iterator = 0;
@@ -80,7 +77,7 @@ public class SMAStar implements PuzzleSolver{
 				}
 				if (successor != null) {
 					boolean isChildCorrect = BoardHelper.checkCorrectness(successor);
-					int childDepth = successor.getSequenceOfSteps().size();
+					int childDepth = successor.getSequenceOfStepsSize();
 					
 					if (!isChildCorrect && childDepth >= memoryLimit) {
 						// f(s) infinity
@@ -103,26 +100,28 @@ public class SMAStar implements PuzzleSolver{
 					open.remove(currentBoard);
 					closed.remove(currentBoard);
 					
-					currentDepth++;
-					if (currentDepth > memoryLimit) {
-						
-						Board removedBoard = closed.poll();
-						open.remove(removedBoard);
-						
-						Board parentBoard = removedBoard.getParentBoard();
-						List<Board> successors = availableSuccessorsMap.get(parentBoard);
-						successors.remove(removedBoard);
-						availableSuccessorsMap.put(parentBoard, successors);
-						
-						if (!open.contains(parentBoard)) {
-							open.add(parentBoard);
-							closed.add(parentBoard);
-						} else {
-							currentDepth--;
+					if (open.size() > memoryLimit) {
+						while (true) {
+							Board removedBoard = closed.poll();
+							open.remove(removedBoard);
+							
+							Board parentBoard = removedBoard.getParentBoard();
+							List<Board> successors = availableSuccessorsMap.get(parentBoard);
+							successors.remove(removedBoard);
+							availableSuccessorsMap.put(parentBoard, successors);
+							
+							if (successors.size() == 0) {
+								parentBoard.setF_x(Integer.MAX_VALUE);
+							}
+							
+							if (!open.contains(parentBoard)) {
+								open.add(parentBoard);
+								closed.add(parentBoard);
+							} else {
+								break;
+							}
 						}
-						if (successors.size() == 0) {
-							parentBoard.setF_x(Integer.MAX_VALUE);
-						}
+						
 					}
 					
 				}

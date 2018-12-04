@@ -29,6 +29,7 @@ import common.Constants.Solver;
 import common.exception.UnsupportedInputException;
 import common.exception.UnsupportedPuzzleTypeException;
 import common.puzzle.Board;
+import common.puzzle.BoardHelper;
 
 /**
  * Hello world!
@@ -58,8 +59,8 @@ public class App
     	System.out.println(Joiner.on(',').join(initBoard.getBoardConfiguration()));
     	try {
 			Board finalBoard = solveBoard(solverType, initBoard, directionOrder, heuristics);
-			System.out.println(finalBoard.getSequenceOfSteps().size());
-			System.out.println(Joiner.on(',').join(finalBoard.getSequenceOfSteps()));
+			System.out.println(finalBoard.getSequenceOfStepsSize());
+			System.out.println(Joiner.on(',').join(BoardHelper.getSequenceOfSteps(finalBoard)));
 		} catch (NotSolvableException e) {
 			System.out.println("-1");
 		}

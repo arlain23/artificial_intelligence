@@ -1,11 +1,8 @@
 package common.puzzle;
 
-import java.awt.HeadlessException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.checkerframework.checker.formatter.qual.ConversionCategory;
 
 import common.Constants;
 import common.Constants.Direction;
@@ -21,16 +18,16 @@ public class Board implements Cloneable{
 	private Board correctBoardBeginningZero;
 	private Board correctBoardEndingZero;
 	
+	private Board parentBoard;
+	private Direction lastStep;
 	
-	private List<Direction> sequenceOfSteps = new ArrayList<>();
 	
 	private int f_x = 0;
 	private int forgotten_f_x = 0;
 	
-	public Board (Node[][] board, EmptyNode emptyNode, List<Direction> sequenceOfSteps, Board correctBoardBeginningZero, Board correctBoardEndingZero) {
+	public Board (Node[][] board, EmptyNode emptyNode, Board correctBoardBeginningZero, Board correctBoardEndingZero) {
 		this.board = board;
 		this.emptyNode = emptyNode;
-		this.sequenceOfSteps = sequenceOfSteps;
 		
 		this.correctBoardBeginningZero = correctBoardBeginningZero;
 		this.correctBoardEndingZero = correctBoardEndingZero;
@@ -39,6 +36,8 @@ public class Board implements Cloneable{
 	}
 	
 	public Board(PuzzleType puzzleType, List<Integer> numbers) {
+		this.parentBoard = null;
+		
 		int r = 0;
 		int c = 0;
 		if (puzzleType == PuzzleType.eight) {
@@ -75,13 +74,6 @@ public class Board implements Cloneable{
 		
 	}
 	
-	private Integer[] initArray(int size) {
-		Integer[] a = new Integer[size];
-	    for (int i = 0; i < 100; ++i) {
-	        a[i] = i;
-	    }
-	    return a;
-	}
 	public List<Integer> getBoardConfiguration() {
 		List<Integer> boardConfiguration = new ArrayList<Integer>();
 		for (int y = 0; y < this.board.length; y++) {
@@ -103,12 +95,14 @@ public class Board implements Cloneable{
 		return null;
 	}
 	
-	public void addDirection(Direction direction) {
-		this.sequenceOfSteps.add(direction);
-		
+	public void setLastDirection(Direction lastStep) {
+		this.lastStep = lastStep;
 	}
 	
-	
+	public void setParentBoard(Board parentBoard) {
+		this.parentBoard = parentBoard;
+	}
+
 	public int getF_x() {
 		return f_x;
 	}
@@ -136,15 +130,12 @@ public class Board implements Cloneable{
 		return this.board.length;
 	}
 	
-    public void setSequenceOfSteps(List<Direction> sequenceOfSteps) {
-		this.sequenceOfSteps = sequenceOfSteps;
+	public int getSequenceOfStepsSize() {
+		return BoardHelper.getSequenceOfSteps(this).size();
 	}
-	public List<Direction> getSequenceOfSteps() {
-		return sequenceOfSteps;
-	}
+	
 	public Direction getLastStep() {
-		if (sequenceOfSteps.size() == 0) return null;
-		return sequenceOfSteps.get(sequenceOfSteps.size() - 1);
+		return lastStep;
 	}
 	public Node[][] getBoard() {
 		return board;
@@ -152,8 +143,7 @@ public class Board implements Cloneable{
 	
 	
 	public Board getParentBoard() {
-		Direction oppositeDirection = Constants.REVERSE_DIRECTION.get(getLastStep());
-		return BoardHelper.moveNode(oppositeDirection, this);
+		return parentBoard;
 	}
 
 	public Board getCorrectBoardBeginningZero() {
@@ -221,6 +211,6 @@ public class Board implements Cloneable{
 				}
 			}
     	}
-    	return new Board(newBoard, emptyNode, new ArrayList<>(sequenceOfSteps), this.correctBoardBeginningZero, this.correctBoardEndingZero);
+    	return new Board(newBoard, emptyNode, this.correctBoardBeginningZero, this.correctBoardEndingZero);
     }
 }

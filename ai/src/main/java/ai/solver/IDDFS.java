@@ -42,7 +42,7 @@ public class IDDFS implements PuzzleSolver {
 					return currentBoard;
 				} else {
 					// check of depth
-					if (currentBoard.getSequenceOfSteps().size() < depth) {
+					if (currentBoard.getSequenceOfStepsSize() < depth) {
 						List<Board> children = BoardHelper.getChildren(currentBoard, directionOrder);
 						for (Board child : children) {
 							if (!history.contains(child) && !stack.contains(child)) {
